@@ -1,0 +1,70 @@
+name: build-and-push-to-github-pages
+description: Push built files to GitHub Pages
+
+inputs:
+  remove:
+    description: "Comma-separated folders to delete"
+    default: ""
+  github_repo:
+    description: "GitHub target in form username/repo"
+    required: true
+  github_pages_branch:
+    description: "GitHub Pages branch"
+    # for my mirrors, using main as default is fine since GH is a public RO archive
+    default: "main"
+  ssh_private_key:
+    description: "SSH private key with write access to the GitHub repo"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install SSH key
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ inputs.ssh_private_key }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Configure git identity
+      shell: bash
+      run: |
+        git config user.name "Forgejo Mirror Bot"
+        git config user.email "forgejo-mirror-bot@pype.dev"
+
+    - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      shell: bash
+      name: Install uv
+
+    - run: uvx zensical build --clean
+      shell: bash
+      name: Build
+
+    - name: Remove folders
+      shell: bash
+      run: |
+        for path in $(echo "${{ inputs.remove }}" | tr ',' '\n'); do
+          echo "Removing $path"
+          rm -rf "$path"
+        done
+
+    - name: Cleanup empty dirs
+      shell: bash
+      run: |
+        find . -type d -empty -delete
+
+    - name: Replace entire history with fresh commit
+      shell: bash
+      run: |
+        git checkout --orphan local-branch
+        ls -alh
+        git add -A
+        git add site --force
+        git commit -m "GH Pages build"
+
+    - name: Push to GitHub via SSH
+      shell: bash
+      run: |
+        git remote add github "git@github.com:${{ inputs.github_repo }}.git"
+        git push github HEAD:${{ inputs.github_pages_branch }} --force
