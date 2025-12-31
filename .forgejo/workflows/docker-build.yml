@@ -1,0 +1,18 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: https://git.paynepride.com/nic/homelab-mono/devops/ci/forgejo-actions/docker-build-push@main
+        with:
+          repoflow_password: ${{ secrets.REPOFLOW_PASSWORD_RW }}
+          repoflow_user: ${{ secrets.REPOFLOW_USER_RW }}
