@@ -1,0 +1,103 @@
+# networks:
+#   phantomlink:
+#     external: true
+#
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:13-rootless
+    container_name: forgejo
+    user: 1000:1000
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - FORGEJO__repository__ENABLE_PUSH_CREATE_USER=true
+      - FORGEJO__openid__ENABLE_OPENID_SIGNUP=false
+      - FORGEJO__service__DISABLE_REGISTRATION=true
+      - FORGEJO__server__SSH_PORT=222
+      - FORGEJO__server__SSH_LISTEN_PORT=2222
+      - FORGEJO__server__ROOT_URL=https://git.paynepride.com
+      # remove this stuff to use sqlite instead
+      # - FORGEJO__database__DB_TYPE=postgres
+      # - FORGEJO__database__HOST=db:5432
+      # - FORGEJO__database__NAME=forgejo
+      # - FORGEJO__database__USER=forgejo
+      # - FORGEJO__database__PASSWD=forgejo
+    restart: always
+    # networks:
+    #   - phantomlink
+    volumes:
+      - /tank/encrypted/docker/forjeo-zfs/forgejo:/var/lib/gitea
+      - /tank/encrypted/docker/forjeo-zfs/conf:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3007:3000"
+      - "222:2222"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.git.rule: "Host(`git.paynepride.com`)"
+      traefik.http.routers.git.tls.certresolver: letsencrypt
+      traefik.http.routers.git.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.git.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.git.loadbalancer.server.port: 3000
+      traefik.http.routers.git.middlewares: extended-whitelist@file
+    # depends_on:
+    #   - db
+
+  # db:
+  #   image: postgres:14
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_USER=forgejo
+  #     - POSTGRES_PASSWORD=forgejo
+  #     - POSTGRES_DB=forgejo
+  #   networks:
+  #     - phantomlink
+  #   volumes:
+  #     - /tank/encrypted/docker/forjeo-zfs/postgres:/var/lib/postgresql/data
+
+  # TODO: decide on this or the blog post's method... maybe this is better
+  docker-in-docker:
+    image: docker:dind
+    # container_name: docker_dind
+    privileged: true
+    command: ["dockerd", "-H", "tcp://0.0.0.0:2375", "--tls=false"]
+    restart: unless-stopped
+    # networks: [phantomlink]
+
+  runner:
+    image: code.forgejo.org/forgejo/runner:11
+    container_name: forgejo-runner
+    links:
+      - docker-in-docker
+    depends_on:
+      docker-in-docker:
+        condition: service_started
+    user: "1001:1001"
+    environment:
+      DOCKER_HOST: tcp://docker-in-docker:2375
+    volumes:
+      - /tank/encrypted/docker/forjeo-zfs/runner-data:/data:Z,U # will hold .runner + cache
+    # INIT: use this command, exec in, run "forgejo-runner register"
+    # command: /bin/sh -c "while :; do sleep 1; done"
+    # THEN: stop runner, swap to this command, bring it back up
+    command: '/bin/sh -c "sleep 5; forgejo-runner daemon -c /data/config.yaml"'
+    restart: unless-stopped
+    # networks: [phantomlink]
+
+  # runner2:
+  #   image: data.forgejo.org/forgejo/runner:11
+  #   container_name: forgejo-runner2
+  #   user: "1001:1001"
+  #   depends_on:
+  #     - docker-in-docker
+  #   environment:
+  #     DOCKER_HOST: tcp://docker-in-docker:2375
+  #   volumes:
+  #     - /tank/encrypted/docker/forjeo-zfs/runner-data2:/data:Z,U # will hold .runner + cache
+  #   # INIT: use this command, exec in, run "forgejo-runner register"
+  #   # command: /bin/sh -c "while :; do sleep 1; done"
+  #   # THEN: stop runner, swap to this command, bring it back up
+  #   command: '/bin/sh -c "sleep 5; forgejo-runner daemon"'
+  #   restart: unless-stopped
+  #   networks: [phantomlink]
