@@ -1,0 +1,76 @@
+# networks:
+#   phantomlink:
+#     external: true
+services:
+  speakr:
+    image: learnedmachine/speakr:latest
+    container_name: speakr
+    restart: unless-stopped
+    ports:
+      - "8899:8899"
+    env_file:
+      - .env
+    volumes:
+      - /var/docker-storage-zfs/volumes/speakr/uploads:/data/uploads
+      - /var/docker-storage-zfs/volumes/speakr/instance:/data/instance
+    # networks:
+    #   - phantomlink
+
+  whisper_asr:
+    image: onerahmet/openai-whisper-asr-webservice:latest-gpu
+    ports:
+      - "9099:9000"
+    environment:
+      - ASR_MODEL=distil-large-v3
+      - ASR_COMPUTE_TYPE=int8
+      - ASR_ENGINE=whisperx
+    env_file: .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    restart: unless-stopped
+    # networks:
+    #   - phantomlink
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:cuda
+    container_name: open-webui
+    restart: always
+    ports:
+      - "3002:8080"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+    # networks:
+    #   - phantomlink
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+    volumes:
+      - /var/docker-storage-zfs/volumes/open-webui/open-webui:/app/backend/data
+
+  ollama:
+    volumes:
+      - /var/docker-storage-zfs/volumes/ollama/ollama:/root/.ollama
+    container_name: ollama
+    tty: true
+    restart: unless-stopped
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_NUM_PARALLEL=4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    # networks:
+    #   - phantomlink
