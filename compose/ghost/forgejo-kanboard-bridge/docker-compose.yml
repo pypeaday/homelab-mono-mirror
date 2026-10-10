@@ -1,0 +1,13 @@
+services:
+  bridge:
+    build: .
+    container_name: forgejo-kanboard-bridge
+    env_file: .env
+    restart: unless-stopped
+    # internal only — forgejo reaches it on phantomlink, nothing public
+    networks:
+      - phantomlink
+
+networks:
+  phantomlink:
+    external: true

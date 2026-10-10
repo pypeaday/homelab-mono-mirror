@@ -1,0 +1,24 @@
+services:
+  wallos:
+    image: "bellamy/wallos:latest"
+    container_name: "wallos"
+    environment:
+      TZ: "America/Chicago"
+    ports:
+      - "8282:80"
+    volumes:
+      - /tank/encrypted/docker/wallos/db:/var/www/html/db
+      - /tank/encrypted/docker/wallos/logos:/var/www/html/images/uploads/logos
+    restart: unless-stopped
+    networks:
+      - phantomlink
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.wallos.rule: "Host(`wallos.paynepride.com`)"
+      traefik.http.routers.wallos.tls.certresolver: letsencrypt
+      traefik.http.routers.wallos.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.wallos.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.wallos.loadbalancer.server.port: "80"
+networks:
+  phantomlink:
+    external: true

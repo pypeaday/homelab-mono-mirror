@@ -1,0 +1,95 @@
+name: twenty
+
+services:
+  server:
+    image: twentycrm/twenty:${TAG}
+    container_name: twenty-server
+    env_file: .env
+    environment:
+      NODE_PORT: 3000
+      PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD}@twenty-db:5432/${PG_DATABASE_NAME:-default}
+      SERVER_URL: ${SERVER_URL}
+      REDIS_URL: redis://twenty-redis:6379
+      STORAGE_TYPE: ${STORAGE_TYPE}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY}
+      APP_SECRET: ${APP_SECRET:-}
+    volumes:
+      - /tank/encrypted/docker/twenty/server:/app/packages/twenty-server/.local-storage
+    depends_on:
+      twenty-db:
+        condition: service_healthy
+      twenty-redis:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:3000/healthz
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.twenty.rule: "Host(`crm.paynepride.com`) || Host(`app.crm.paynepride.com`) || Host(`dh.crm.paynepride.com`) || Host(`goodworks.crm.paynepride.com`) || Host(`gdwrks.crm.paynepride.com`) || Host(`notifiq.crm.paynepride.com`)"
+      traefik.http.routers.twenty.tls.certresolver: "letsencrypt"
+      traefik.http.routers.twenty.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.twenty.tls.domains[0].sans: "*.paynepride.com,*.crm.paynepride.com"
+      traefik.http.services.twenty.loadbalancer.server.port: "3000"
+    networks:
+      - default
+      - phantomlink
+    restart: unless-stopped
+
+  worker:
+    image: twentycrm/twenty:${TAG}
+    container_name: twenty-worker
+    env_file: .env
+    command: ["yarn", "worker:prod"]
+    environment:
+      PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD}@twenty-db:5432/${PG_DATABASE_NAME:-default}
+      SERVER_URL: ${SERVER_URL}
+      REDIS_URL: redis://twenty-redis:6379
+      DISABLE_DB_MIGRATIONS: "true" # it already runs on the server
+      DISABLE_CRON_JOBS_REGISTRATION: "true" # it already runs on the server
+      STORAGE_TYPE: ${STORAGE_TYPE}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY}
+      APP_SECRET: ${APP_SECRET:-}
+    volumes:
+      - /tank/encrypted/docker/twenty/server:/app/packages/twenty-server/.local-storage
+    depends_on:
+      twenty-db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+    restart: unless-stopped
+
+  twenty-db:
+    image: postgres:16
+    container_name: twenty-db
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${PG_DATABASE_NAME:-default}
+      POSTGRES_USER: ${PG_DATABASE_USER:-postgres}
+      POSTGRES_PASSWORD: ${PG_DATABASE_PASSWORD}
+    volumes:
+      - /tank/encrypted/docker/twenty/db:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${PG_DATABASE_USER:-postgres} -h localhost -d postgres
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  twenty-redis:
+    image: redis
+    container_name: twenty-redis
+    command: ["--maxmemory-policy", "noeviction"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+networks:
+  phantomlink:
+    external: true

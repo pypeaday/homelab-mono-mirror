@@ -1,0 +1,25 @@
+services:
+  loan-tracker:
+    image: "schnese-loan-loan-tracker"
+    container_name: "schnese-loan-loan-tracker-1"
+    environment:
+      DATABASE_URL: "sqlite:///data/loan.db"
+    ports:
+      - "7998:8000"
+    volumes:
+      - /tank/encrypted/docker/schnese-loan/templates:/app/templates
+      - /tank/encrypted/docker/schnese-loan/data:/app/data
+      - /tank/encrypted/docker/schnese-loan/static:/app/static
+    restart: unless-stopped
+    networks:
+      - phantomlink
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.schnese.rule: "Host(`schnese.paynepride.com`)"
+      traefik.http.routers.schnese.tls.certresolver: letsencrypt
+      traefik.http.routers.schnese.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.schnese.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.schnese.loadbalancer.server.port: "8000"
+networks:
+  phantomlink:
+    external: true

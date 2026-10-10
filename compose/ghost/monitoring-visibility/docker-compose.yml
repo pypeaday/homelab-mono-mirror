@@ -1,0 +1,33 @@
+services:
+  glances:
+    image: "nicolargo/glances@sha256:60aa512f4a421d36ec14d2c1d3af05ce57e9b0d5d5826cdd57c1c7467a31269e"
+    container_name: "glances"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/timezone:/etc/timezone:ro
+    pid: "host"
+    ports:
+      - "61208:61208"
+      - "61209:61209"
+    environment:
+      GLANCES_OPT: -w
+    security_opt:
+      - "apparmor:unconfined"
+    deploy:
+      resources:
+        limits:
+          memory: "1g"
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.glances.rule: Host(`glances.paynepride.com`)
+      traefik.http.routers.glances.tls.certresolver: letsencrypt
+      traefik.http.routers.glances.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.glances.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.glances.loadbalancer.server.port: "61208"
+      traefik.http.routers.glances.middlewares: default-whitelist@file
+networks:
+  phantomlink:
+    external: true

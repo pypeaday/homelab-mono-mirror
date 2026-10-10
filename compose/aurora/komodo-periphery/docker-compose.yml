@@ -1,0 +1,36 @@
+# Komodo Periphery agent — runs on aurora (or any managed node).
+# Registers itself with Komodo Core on ghost over tailscale.
+#
+# Setup:
+#   1. In https://komodo.paynepride.com, create a Server Onboarding Key.
+#   2. Copy .env.example to .env and fill in PERIPHERY_ONBOARDING_KEY.
+#   3. On aurora: docker compose -p komodo-periphery up -d
+#      (repo lives in shared $HOME — run from the aurora host shell or distrobox-host-exec)
+#   4. Confirm the Server shows "OK" in the Komodo UI; the onboarding key
+#      can then be removed from .env (key exchange is complete after first connect).
+services:
+  periphery:
+    image: ghcr.io/moghtech/komodo-periphery:2
+    container_name: komodo-periphery
+    init: true
+    restart: unless-stopped
+    labels:
+      komodo.skip: # Prevent Komodo from stopping this with StopAllContainers
+    environment:
+      # Komodo Core on ghost, tailnet-only listener
+      PERIPHERY_CORE_ADDRESS: ws://100.64.184.5:9120
+      PERIPHERY_CONNECT_AS: ${PERIPHERY_CONNECT_AS:-aurora}
+      PERIPHERY_ONBOARDING_KEY: ${PERIPHERY_ONBOARDING_KEY:-}
+      # File is auto-written on first connect to match the Core it talks to
+      PERIPHERY_CORE_PUBLIC_KEYS: file:/config/keys/core.pub
+      PERIPHERY_ROOT_DIRECTORY: ${PERIPHERY_ROOT_DIRECTORY:-/var/docker-storage-zfs/komodo}
+      PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
+    volumes:
+      - keys:/config/keys
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/proc
+      # Root dir must be identical inside and outside the container
+      - ${PERIPHERY_ROOT_DIRECTORY:-/var/docker-storage-zfs/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/var/docker-storage-zfs/komodo}
+
+volumes:
+  keys:

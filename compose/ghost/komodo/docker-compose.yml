@@ -1,0 +1,77 @@
+# Komodo — container/stack management (Portainer replacement trial)
+# Core + Mongo + Periphery on ghost. UI: https://komodo.paynepride.com
+# Deploy: docker --context ghost compose -p komodo up -d
+services:
+  mongo:
+    image: mongo
+    container_name: komodo-mongo
+    labels:
+      komodo.skip: # Prevent Komodo from stopping this with StopAllContainers
+    command: --quiet --wiredTigerCacheSizeGB 0.25
+    restart: unless-stopped
+    volumes:
+      - /tank/encrypted/docker/komodo-zfs/mongo:/data/db
+      - /tank/encrypted/docker/komodo-zfs/mongo-config:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${KOMODO_DATABASE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${KOMODO_DATABASE_PASSWORD}
+
+  core:
+    image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-2}
+    container_name: komodo-core
+    init: true
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    labels:
+      komodo.skip:
+      traefik.enable: "true"
+      traefik.http.routers.komodo.rule: Host(`komodo.paynepride.com`)
+      traefik.http.routers.komodo.tls.certresolver: letsencrypt
+      traefik.http.routers.komodo.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.komodo.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.komodo.loadbalancer.server.port: "9120"
+      traefik.http.routers.komodo.middlewares: default-whitelist@file
+    env_file: .env
+    environment:
+      KOMODO_DATABASE_ADDRESS: mongo:27017
+    ports:
+      # Periphery agents on other nodes dial this over tailscale
+      - "100.64.184.5:9120:9120"
+    volumes:
+      - keys:/config/keys
+      - /tank/encrypted/docker/komodo-zfs/backups:/backups
+    networks:
+      - default
+      - phantomlink
+
+  periphery:
+    image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-2}
+    container_name: komodo-periphery
+    init: true
+    restart: unless-stopped
+    depends_on:
+      - core
+    labels:
+      komodo.skip:
+    env_file: .env
+    volumes:
+      - keys:/config/keys
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/proc
+      # Periphery root: stack files + cloned repos live here; same path
+      # inside and out so docker volume mounts resolve correctly.
+      - /tank/encrypted/docker/komodo-zfs/periphery:/tank/encrypted/docker/komodo-zfs/periphery
+      # Host compose sources (the /tank homelab-compose tree) at identical
+      # paths so file-mode Stacks and docker.sock resolves mounts correctly.
+      - /tank/encrypted/nas/code/homelab-compose:/tank/encrypted/nas/code/homelab-compose
+      # vocal-remover watcher mounts live code from its repo dir — same-path
+      # mount so the file-mode Stack's volume paths resolve via docker.sock.
+      - /home/nic/projects/personal/vocal-remover:/home/nic/projects/personal/vocal-remover
+
+volumes:
+  keys:
+
+networks:
+  phantomlink:
+    external: true

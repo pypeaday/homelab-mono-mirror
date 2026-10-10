@@ -1,0 +1,37 @@
+services:
+  grist:
+    image: "repoflow.paynepride.com/foo/dockerhub/gristlabs/grist"
+    container_name: "grist"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "America/Chicago"
+      GRIST_DOCKER_USER: "grist"
+      GRIST_DOCKER_GROUP: "grist"
+      GRIST_HOST: "0.0.0.0"
+      GRIST_SINGLE_PORT: "true"
+      GRIST_SERVE_SAME_ORIGIN: "true"
+      GRIST_DATA_DIR: "/persist/docs"
+      GRIST_INST_DIR: "/persist"
+      GRIST_SESSION_COOKIE: "grist_core"
+      GRIST_ALLOW_AUTOMATIC_VERSION_CHECKING: "true"
+      GVISOR_FLAGS: "-unprivileged -ignore-cgroups"
+      GRIST_SANDBOX_FLAVOR: "unsandboxed"
+      TYPEORM_DATABASE: "/persist/home.sqlite3"
+    ports:
+      - "8484:8484"
+    volumes:
+      - /tank/encrypted/docker/the-pit-zfs/grist:/persist
+    restart: unless-stopped
+    networks:
+      - phantomlink
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.grist.rule: "Host(`grist.paynepride.com`)"
+      traefik.http.routers.grist.tls.certresolver: letsencrypt
+      traefik.http.routers.grist.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.grist.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.grist.loadbalancer.server.port: "8484"
+networks:
+  phantomlink:
+    external: true

@@ -1,0 +1,90 @@
+name: build-and-push-to-github-pages
+description: Push built files to GitHub Pages
+
+inputs:
+  remove:
+    description: "Comma-separated folders to delete"
+    default: ""
+  github_repo:
+    description: "GitHub target in form username/repo"
+    required: true
+  github_pages_branch:
+    description: "GitHub Pages branch"
+    # for my mirrors, using main as default is fine since GH is a public RO archive
+    default: "main"
+  ssh_private_key:
+    description: "SSH private key with write access to the GitHub repo"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install SSH key
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ inputs.ssh_private_key }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Configure git identity
+      shell: bash
+      run: |
+        git config user.name "Forgejo Mirror Bot"
+        git config user.email "forgejo-mirror-bot@pype.dev"
+
+    - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      # - run: curl -LsSf https://astral.sh/uv/0.9.15/install.sh | sh
+      shell: bash
+      name: Install uv
+
+    - name: Install just
+      shell: bash
+      run: |
+        # curl -L --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+        #
+        # curl -s https://i.paynepride.com/casey/just | bash
+
+        curl -sSL "$(curl -s https://api.github.com/repos/casey/just/releases/latest \
+          | grep \"browser_download_url.*x86_64-unknown-linux-musl.tar.gz\" \
+          | cut -d '"' -f 4)" \
+          -o just.tar.gz
+        tar -xzf just.tar.gz
+        mv just /usr/local/bin/just
+        chmod +x /usr/local/bin/just
+        rm just.tar.gz
+        rm just.1 || echo "just.1 not found"
+
+    - name: Build from Just recipe
+      shell: bash
+      run: just build-site
+
+    - name: Remove folders
+      shell: bash
+      run: |
+        for path in $(echo "${{ inputs.remove }}" | tr ',' '\n'); do
+          echo "Removing $path"
+          rm -rf "$path"
+        done
+
+    - name: Cleanup empty dirs
+      shell: bash
+      run: |
+        find . -type d -empty -delete
+
+    # TODO: site and markout need configured or standardized
+
+    - name: Replace entire history with fresh commit
+      shell: bash
+      run: |
+        git checkout --orphan local-branch
+        ls -alh
+        git add -A
+        git add site --force
+        git commit -m "GH Pages build"
+
+    - name: Push to GitHub via SSH
+      shell: bash
+      run: |
+        git remote add github "git@github.com:${{ inputs.github_repo }}.git"
+        git push github HEAD:${{ inputs.github_pages_branch }} --force

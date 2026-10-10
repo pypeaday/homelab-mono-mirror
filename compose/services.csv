@@ -1,0 +1,126 @@
+service,host,port,internal_port,domain,tunnel_domain,traefik_labels,whitelist,image_tag,notes
+# === GHOST SERVICES ===
+actual,ghost,5006,5006,actual.paynepride.com,http://ghost:5006,yes,no,latest,
+affine,ghost,3010,3010,affine.paynepride.com,http://ghost:3010,yes,no,stable,Multi-service: postgres, redis
+apprise,ghost,8066,8000,-,-,no,no,latest,Not currently used
+archivebox,ghost,8004,8000,archivebox.paynepride.com,http://ghost:8004,yes,no,0.7.2,Multi-service: telegram-bot, scheduler, sonic
+# arrs - multiple services
+arrs-readarr,ghost,8787,8787,readarr.paynepride.com,http://ghost:8787,yes,yes,develop,
+arrs-audioreadarr,ghost,8788,8787,audioreadarr.paynepride.com,http://ghost:8788,yes,yes,develop,
+arrs-lidarr,ghost,8686,8686,lidarr.paynepride.com,http://ghost:8686,yes,yes,linuxserver,
+arrs-radarr,ghost,7878,7878,radarr.paynepride.com,http://ghost:7878,yes,yes,linuxserver,
+arrs-sonarr,ghost,8989,8989,sonarr.paynepride.com,http://ghost:8989,yes,yes,linuxserver,
+arrs-bazarr,ghost,6767,6767,bazarr.paynepride.com,http://ghost:6767,yes,yes,linuxserver,
+arrs-ombi,ghost,3579,3579,ombi.paynepride.com,http://ghost:3579,yes,no,linuxserver,
+arrs-jellyseerr,ghost,5055,5055,jellyseerr.paynepride.com,http://ghost:5055,yes,no,latest,
+arrs-prowlarr,ghost,9696,9696,prowlarr.paynepride.com,http://ghost:9696,yes,yes,develop,
+arrs-gluetun,ghost,9091,9091,-,-,no,no,-,VPN service for transmission
+arrs-transmission,ghost,9091,9091,transmission.paynepride.com,http://ghost:9091,yes,yes,linuxserver,
+arrs-tdarr,ghost,8265,8265,tdarr.paynepride.com,http://ghost:8265,yes,yes,latest,
+# end arrs
+beszel,ghost,8090,8090,-,-,no,no,latest,Not currently used
+beszel-agent,ghost,45876,45876,-,-,no,no,-,
+chatgpt-telegram-bot,ghost,-,-,-,-,no,no,latest,Not currently used
+code-server,ghost,8443,8443,code.paynepride.com,http://ghost:8443,yes,yes,custom,pypeaday/code-server
+container-registry,ghost,5001,5000,registry.paynepride.com,http://ghost:5001,yes,yes,registry:2,
+container-registry-ui,ghost,8087,80,registry-ui.paynepride.com,http://ghost:8087,yes,yes,-,
+dashy,ghost,-,-,-,-,no,no,-,Config-only service
+domain-locker,ghost,3003,3000,domain-locker.paynepride.com,http://ghost:3003,yes,no,latest,Multi-service: postgres
+duplicati,ghost,8200,8200,-,-,no,no,latest,Not currently used
+eigenfocus,ghost,3001,3000,eigenfocus.paynepride.com,http://ghost:3001,yes,yes,1.0.0-free,
+forgejo,ghost,3007,3000,git.paynepride.com,http://ghost:3007,yes,no,13-rootless,Multi-service: dind, runner
+freshrss,ghost,8092,80,freshrss.paynepride.com,http://ghost:8092,yes,no,latest,
+frigate,ghost,5000,5000,frigate.paynepride.com,http://ghost:5000,yes,yes,stable,
+gotify,ghost,2346,80,gotify.paynepride.com,http://ghost:2346,yes,no,latest,
+# homelab-stack - custom apps
+homelab-audiomass,ghost,5056,5055,audiomass.paynepride.com,http://ghost:5056,yes,no,latest,
+homelab-gh-star-sorter,ghost,8077,8000,gh-star-sorter.paynepride.com,http://ghost:8077,yes,no,latest,
+homelab-dad-can-i-wear-this,ghost,8078,8000,dad-can-i-wear-this.paynepride.com,http://ghost:8078,yes,no,latest,
+homelab-whose-turn-is-it,ghost,8079,8000,whose-turn-is-it.paynepride.com,http://ghost:8079,yes,yes,latest,
+homelab-gwl-marg-tracker,ghost,8076,8000,gwl-marg-tracker.paynepride.com,http://ghost:8076,yes,no,0.0.9,
+homelab-santa-tracker,ghost,8050,8050,santa-tracker.paynepride.com,http://ghost:8050,yes,no,latest,
+homelab-clocks,ghost,8881,8000,clocks.paynepride.com,http://ghost:8881,yes,no,latest,
+# end homelab-stack
+homebox,ghost,3100,7745,homebox.paynepride.com,http://ghost:3100,yes,yes,latest,
+images.pype.dev,ghost,7999,8000,shotput.paynepride.com,http://ghost:7999,yes,yes,latest,
+# immich - main instance
+immich-server,ghost,2283,2283,immich.paynepride.com,http://ghost:2283,yes,yes,release,
+immich-ml,ghost,-,-,-,-,no,no,release,
+immich-redis,ghost,-,-,-,-,no,no,redis,
+immich-postgres,ghost,-,-,-,-,no,no,tensorchord/pgvecto-rs,
+# end immich
+# immich-memes - separate instance
+immich-memes-server,ghost,-,2283,-,-,yes,no,release,
+immich-memes-ml,ghost,-,-,-,-,no,no,release,
+immich-memes-redis,ghost,-,-,-,-,no,no,redis,
+immich-memes-postgres,ghost,-,-,-,-,no,no,tensorchord/pgvecto-rs,
+# end immich-memes
+installer,ghost,3006,3000,i.paynepride.com,http://ghost:3006,yes,no,custom,pypeaday/installer
+kanboard,ghost,8009,80,kanboard.paynepride.com,http://ghost:8009,yes,no,latest,
+karakeep,ghost,3030,3000,karakeep.paynepride.com,http://ghost:3030,yes,no,release,Multi-service: chrome, meilisearch
+linkding,ghost,9093,9090,linkding.paynepride.com,http://ghost:9093,yes,yes,latest,
+manyfold,ghost,3214,3214,manyfold.paynepride.com,http://ghost:3214,yes,yes,latest,Multi-service: postgres, redis
+# media-stack
+media-jellyfin,ghost,8896,8096,jellyfin.paynepride.com,http://ghost:8896,yes,no,linuxserver,
+media-jellystat,ghost,3004,3000,jellystat.paynepride.com,http://ghost:3004,yes,yes,1.1.0,
+media-audiobookshelf,ghost,13378,80,audiobookshelf.paynepride.com,http://ghost:13378,yes,no,latest,
+media-ubooquity,ghost,2202,2202,ubooquity.paynepride.com,http://ghost:2202,yes,no,linuxserver,
+media-pinchflat,ghost,8945,8945,pinchflat.paynepride.com,http://ghost:8945,yes,no,latest,
+# end media-stack
+meme-search,ghost,3006,3000,meme-search.paynepride.com,http://ghost:3006,yes,no,latest,Multi-service: pgvector
+minio,ghost,9000,9000,s3.paynepride.com,http://ghost:9000,yes,no,pinned,
+minio-console,ghost,9001,9001,minio.paynepride.com,http://ghost:9001,yes,yes,-,
+# monitoring
+monitoring-glances,ghost,61208,61208,glances.paynepride.com,http://ghost:61208,yes,yes,-,
+monitoring-netdata,ghost,19999,19999,netdata.paynepride.com,http://ghost:19999,yes,yes,-,
+# end monitoring
+nextcloud,ghost,8081,80,nextcloud.paynepride.com,http://ghost:8081,yes,no,latest,Multi-service: mysql, redis, cron
+nostr-relay,ghost,7000,8080,n.paynepride.com,http://ghost:7000,yes,no,latest,
+paperless-ngx,ghost,16922,8000,paperless.paynepride.com,http://ghost:16922,yes,no,latest,Multi-service: postgres, redis, paperless-gpt
+portainer,ghost,9002,9000,portainer.paynepride.com,http://ghost:9002,yes,yes,sts,
+postiz,ghost,5002,5000,postiz.paynepride.com,http://ghost:5002,yes,no,nostr-test2,Multi-service: postgres, redis
+re-director,ghost,8084,80,redirector.paynepride.com,http://ghost:8084,yes,no,latest,
+reels,ghost,8095,3923,reels.paynepride.com,http://ghost:8095,yes,no,latest,copyparty video gallery
+searxng,ghost,8070,8080,searxng.paynepride.com,http://ghost:8070,yes,yes,latest,Multi-service: redis
+stirlingtools,ghost,8010,8080,stirlingtools.paynepride.com,http://ghost:8010,yes,yes,latest,
+syncthing,ghost,8384,8384,-,-,no,no,-,LAN-only
+# temporalio
+temporal-server,ghost,7233,7233,temporal.paynepride.com,http://ghost:7233,yes,yes,-,
+temporal-ui,ghost,8071,8080,temporal-ui.paynepride.com,http://ghost:8071,yes,yes,-,
+temporal-opensearch,ghost,-,9200,-,-,yes,yes,-,
+temporal-postgres,ghost,-,5432,-,-,no,no,-,
+# end temporalio
+# === BABYBLUE SERVICES ===
+# ai stack - exposed via static traefik config
+ai-ollama,babyblue,11434,11434,-,http://babyblue-aurora:11434,no,no,latest,
+ai-open-webui,babyblue,3002,8080,-,http://babyblue-aurora:3002,no,no,cuda,
+ai-whisper,babyblue,9099,9000,-,http://babyblue-aurora:9099,no,no,latest-gpu,
+ai-speakr,babyblue,8899,8899,-,http://babyblue-aurora:8899,no,no,latest,
+beszel-agent,babyblue,45876,45876,-,-,no,no,-,
+code-server,babyblue,8443,8443,-,-,no,no,custom,pypeaday/code-server
+# developer-stack
+developer-mcphub,babyblue,3000,3000,-,-,no,no,-,
+developer-qdrant,babyblue,6333,6333,-,-,no,no,-,
+# end developer-stack
+immich-remote-ml,babyblue,-,-,-,-,no,no,release-cuda,
+# khoj
+khoj-server,babyblue,42110,42110,-,http://babyblue-aurora:42110,no,no,latest,
+khoj-database,babyblue,-,5432,-,-,no,no,ankane/pgvector,
+khoj-search,babyblue,-,8080,-,-,no,no,latest,
+khoj-sandbox,babyblue,-,8080,-,-,no,no,latest,
+# end khoj
+kotaemon,babyblue,-,-,-,-,no,no,main-full,
+# monitoring
+monitoring-glances,babyblue,61208,61208,-,http://babyblue-aurora:61208,no,no,-,
+monitoring-netdata,babyblue,19999,19999,-,http://babyblue-aurora:19999,no,no,-,
+# end monitoring
+portainer-agent,babyblue,-,-,-,-,no,no,2.20.3,
+tdarr-node,babyblue,-,-,-,-,no,no,latest,
+# timetracker
+timetracker-app,babyblue,8093,8080,-,http://babyblue-aurora:8093,no,no,-,
+timetracker-db,babyblue,-,5432,-,-,no,no,16-alpine,
+# end timetracker
+# === ARCHIVED SERVICES ===
+# bentopdf,ghost,-,-,-,-,no,no,latest,DEPRECATED
+# nitter,ghost,8889,8081,-,-,yes,yes,sekai-soft,DEPRECATED
+signoz,ghost,3301,3301,signoz.paynepride.com,http://ghost:3301,yes,yes,pinned-0.64.0,Full observability: traces+metrics+logs+alerts
