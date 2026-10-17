@@ -1,0 +1,6 @@
+{
+  "digest_rules": ["Sanoid warning"],
+  "suppress_rules": [],
+  "suppress_severities": ["info"],
+  "critical_bypass": true
+}
