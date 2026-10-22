@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>budget</title>
+<style>
+  :root { --bg:#0e1116; --panel:#171c24; --line:#262d38; --txt:#dfe5ec; --dim:#8b95a3;
+          --in:#4ec98a; --out:#e06c75; --net:#61afef; --accent:#c8a24e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
+  .wrap { max-width:1080px; margin:0 auto; padding:18px 16px 40px; }
+  h1 { font-size:20px; margin:0; font-weight:600; }
+  .sub { color:var(--dim); font-size:12px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .btn { background:var(--panel); border:1px solid var(--line); color:var(--dim); padding:4px 12px;
+         border-radius:6px; cursor:pointer; font:inherit; }
+  .btn.on { color:var(--txt); border-color:var(--accent); }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin:16px 0; }
+  .kpi { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px 14px; }
+  .kpi b { display:block; font-size:20px; font-weight:600; margin-top:2px; }
+  .kpi span { color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
+  .neg { color:var(--out); } .pos { color:var(--in); }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; margin:12px 0; }
+  .panel h2 { font-size:12px; margin:0 0 10px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  td,th { padding:4px 6px; text-align:right; }
+  td:first-child,th:first-child { text-align:left; }
+  th { color:var(--dim); font-weight:400; font-size:11px; border-bottom:1px solid var(--line); }
+  .bar { height:9px; background:var(--line); border-radius:3px; overflow:hidden; min-width:60px; }
+  .bar i { display:block; height:100%; background:var(--accent); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:760px){ .grid2{grid-template-columns:1fr} }
+  svg { display:block; width:100%; height:auto; }
+  .legend { display:flex; gap:16px; font-size:11px; color:var(--dim); margin-top:4px; }
+  .sw { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="row" style="justify-content:space-between">
+    <div><h1>budget</h1><div class="sub" id="updated">loading…</div></div>
+    <div class="row" id="periods"></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="panel"><h2>monthly — in / out / net</h2><div id="monthly"></div>
+    <div class="legend"><span><i class="sw" style="background:var(--in)"></i>in</span><span><i class="sw" style="background:var(--out)"></i>out</span><span><i class="sw" style="background:var(--net)"></i>net</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel"><h2>spend by category</h2><div id="cats"></div></div>
+    <div class="panel"><h2>top payees</h2><div id="payees"></div></div>
+  </div>
+
+  <div class="panel"><h2>category trend — top 8 (monthly)</h2><div id="trend"></div><div class="legend" id="trendleg"></div></div>
+
+  <div class="grid2">
+    <div class="panel"><h2>income</h2><div id="income"></div></div>
+    <div class="panel"><h2>accounts &amp; health</h2><div id="health"></div></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const fmt=n=>Math.abs(n)>=10000?(n/1000).toFixed(1)+'k':n.toLocaleString();
+const money=n=>(n<0?'-':'')+'$'+Math.abs(n).toLocaleString();
+const PALETTE=['#e06c75','#61afef','#4ec98a','#c8a24e','#b48ead','#56b6c2','#d19a66','#98c379'];
+let DATA=null, PERIOD='ytd';
+
+async function load(){
+  const r=await fetch('data.json',{cache:'no-store'});
+  DATA=await r.json();
+  render();
+}
+
+function kpi(label,val,cls=''){return `<div class="kpi"><span>${label}</span><b class="${cls}">${val}</b></div>`;}
+
+function render(){
+  const p=DATA.periods[PERIOD];
+  $('#updated').textContent='updated '+new Date(DATA.generated).toLocaleString()+(DATA.error?' · refresh error: '+DATA.error:'');
+  $('#periods').innerHTML=[['m3','3M'],['m6','6M'],['ytd','YTD'],['m12','12M'],['all','all']]
+    .map(([k,l])=>`<button class="btn ${k===PERIOD?'on':''}" onclick="PERIOD='${k}';render()">${l}</button>`).join('');
+  const mAvg=p.out/Math.max(1,daysIn(PERIOD)/30.4);
+  $('#kpis').innerHTML=
+    kpi(`net ${PERIOD}`,money(p.net),p.net<0?'neg':'pos')+
+    kpi('spend',money(p.out))+
+    kpi('income',money(p.in),'pos')+
+    kpi('avg spend/mo',money(Math.round(mAvg)),'neg')+
+    kpi('uncategorized',DATA.health.uncat+' txns',DATA.health.uncat?'neg':'');
+  monthlyChart(); topList('#cats',p.cats); topList('#payees',p.payees); topList('#income',p.income,true); trendChart(); health();
+}
+
+function daysIn(k){return k==='m3'?92:k==='m6'?182:k==='m12'?365:k==='ytd'?(Date.now()-new Date(new Date().getFullYear(),0,1))/864e5:365;}
+
+function monthlyChart(){
+  const ms=DATA.months,max=Math.max(...ms.map(m=>Math.max(m.in,m.out)))*1.08||1;
+  const W=1000,H=180,bw=W/ms.length;
+  let s=`<svg viewBox="0 0 ${W} ${H+22}">`;
+  ms.forEach((m,i)=>{
+    const x=i*bw+bw*.12,w=bw*.28,y=v=>H-(v/max)*H;
+    s+=`<rect x="${x}" y="${y(m.in)}" width="${w}" height="${H-y(m.in)}" fill="var(--in)" rx="2"/>`;
+    s+=`<rect x="${x+w+2}" y="${y(m.out)}" width="${w}" height="${H-y(m.out)}" fill="var(--out)" rx="2"/>`;
+    s+=`<text x="${i*bw+bw/2}" y="${H+14}" fill="var(--dim)" font-size="10" text-anchor="middle">${m.m.slice(2)}</text>`;
+  });
+  const pts=ms.map((m,i)=>`${(i*bw+bw/2).toFixed(1)},${(H-(Math.max(0,m.net)/max)*H).toFixed(1)}`).join(' ');
+  s+=`<polyline points="${pts}" fill="none" stroke="var(--net)" stroke-width="2"/>`;
+  ms.forEach((m,i)=>{ if(m.net<0) s+=`<circle cx="${i*bw+bw/2}" cy="${H}" r="3" fill="var(--out)"/>`; });
+  $('#monthly').innerHTML=s+'</svg>';
+}
+
+function topList(sel,rows,income){
+  const max=rows[0]?.[1]||1;
+  $(sel).innerHTML='<table>'+rows.slice(0,18).map(([n,v])=>
+    `<tr><td>${n}</td><td style="width:34%"><div class="bar"><i style="width:${(v/max*100).toFixed(1)}%${income?';background:var(--in)':''}"></i></div></td><td>${money(v)}</td></tr>`).join('')+'</table>';
+}
+
+function trendChart(){
+  const cms=DATA.catMonthly,names=Object.keys(cms),ms=DATA.months;
+  const totals=ms.map((_,i)=>names.reduce((s,n)=>s+cms[n][i],0))||[1];
+  const max=Math.max(...totals)*1.05||1,W=1000,H=170,bw=W/ms.length;
+  let s=`<svg viewBox="0 0 ${W} ${H+22}">`;
+  ms.forEach((m,i)=>{
+    let y=H;
+    names.forEach((n,j)=>{
+      const h=(cms[n][i]/max)*H; y-=h;
+      s+=`<rect x="${i*bw+bw*.15}" y="${y}" width="${bw*.7}" height="${h}" fill="${PALETTE[j%8]}" rx="1"/>`;
+    });
+    s+=`<text x="${i*bw+bw/2}" y="${H+14}" fill="var(--dim)" font-size="10" text-anchor="middle">${m.m.slice(2)}</text>`;
+  });
+  $('#trend').innerHTML=s+'</svg>';
+  $('#trendleg').innerHTML=names.map((n,j)=>`<span><i class="sw" style="background:${PALETTE[j%8]}"></i>${n}</span>`).join('');
+}
+
+function health(){
+  const h=DATA.health;
+  $('#health').innerHTML='<table>'+h.balances.map(([n,v])=>`<tr><td>${n}</td><td class="${v<0?'neg':''}">${money(v)}</td></tr>`).join('')+
+    `</table><div class="sub" style="margin-top:8px">latest txn ${h.latestTxn} · ${h.uncat} uncategorized (${money(h.uncatNet)})</div>`;
+}
+
+load(); setInterval(load,120000);
+</script>
+</body>
+</html>

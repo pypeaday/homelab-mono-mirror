@@ -1,0 +1,1436 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Docs for my homelab and all the things in it">
+      
+      
+        <meta name="author" content="Nic Payne">
+      
+      
+      
+      
+        <link rel="prev" href="../../platform/instructions/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="zensical-0.0.71">
+    
+    
+      
+        <title>Power & Maintenance Runbook - Homelab Mono</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../assets/stylesheets/classic/main.68ef4dbf.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/classic/palette.813d4b3f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Homelab Mono" class="md-header__button md-logo" aria-label="Homelab Mono" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Homelab Mono
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Power &amp; Maintenance Runbook
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Homelab Mono" class="md-nav__button md-logo" aria-label="Homelab Mono" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Homelab Mono
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-rocket" viewBox="0 0 24 24"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+  Homelab Mono(repo)
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../compose/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Compose
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../dataops/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Dataops
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devops/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Devops
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../original-docs/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-rocket" viewBox="0 0 24 24"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+  Original docs
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Original docs
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../original-docs/markdown/" class="md-nav__link">
+        
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Markdown</title><path d="M22.27 19.385H1.73A1.73 1.73 0 0 1 0 17.655V6.345a1.73 1.73 0 0 1 1.73-1.73h20.54A1.73 1.73 0 0 1 24 6.345v11.308a1.73 1.73 0 0 1-1.73 1.731zM5.769 15.923v-4.5l2.308 2.885 2.307-2.885v4.5h2.308V8.078h-2.308l-2.307 2.885-2.308-2.885H3.46v7.847zM21.232 12h-2.309V8.077h-2.307V12h-2.308l3.461 4.039z"/></svg>
+  
+  <span class="md-ellipsis">
+    
+  
+  Markdown in 5min
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../platform/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Platform
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Platform
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/instructions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Stuff
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Runbooks
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Runbooks
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Power &amp; Maintenance Runbook
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Power &amp; Maintenance Runbook
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#topology-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Topology at a glance
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Topology at a glance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-flow-backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Data flow (backups)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-on-a-power-cut-power-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What happens on a power cut + power restore
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What happens on a power cut + power restore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comes-back-automatically-verified-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Comes back automatically (verified live)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-not-come-back-needs-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Does NOT come back / needs attention
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shutdown-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shutdown order
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startup-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Startup order
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Verification
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixes-to-apply-need-sudo-on-ghost-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Fixes to apply (need sudo on ghost / accounts)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incident-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Incident log
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Incident log">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2026-10-21-zfs-kernel-panic-hard-reboot" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2026-10-21 — ZFS kernel panic + hard reboot
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#topology-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Topology at a glance
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Topology at a glance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-flow-backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Data flow (backups)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-on-a-power-cut-power-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What happens on a power cut + power restore
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What happens on a power cut + power restore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comes-back-automatically-verified-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Comes back automatically (verified live)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-not-come-back-needs-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Does NOT come back / needs attention
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shutdown-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shutdown order
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startup-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Startup order
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Verification
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixes-to-apply-need-sudo-on-ghost-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Fixes to apply (need sudo on ghost / accounts)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incident-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Incident log
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Incident log">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2026-10-21-zfs-kernel-panic-hard-reboot" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        2026-10-21 — ZFS kernel panic + hard reboot
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  
+  <span class="md-ellipsis">
+    Homelab Mono(repo)
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-path__item">
+        <a href="././" class="md-path__link">
+          
+  
+  <span class="md-ellipsis">
+    Runbooks
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+
+<h1 id="power-maintenance-runbook">Power &amp; Maintenance Runbook<a class="headerlink" href="#power-maintenance-runbook" title="Permanent link">&para;</a></h1>
+<p>How to shut down, physically move, and power back up the homelab with
+confidence. Audited 2026-10-19 against live state on ghost, ghost-vault,
+aurora, and the router.</p>
+<h2 id="topology-at-a-glance">Topology at a glance<a class="headerlink" href="#topology-at-a-glance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Box</th>
+<th>Role</th>
+<th>Storage</th>
+<th>Boot risks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OPNsense</strong> @ 192.168.1.1:8443</td>
+<td>router, DHCP, gateway</td>
+<td>own appliance</td>
+<td>none — designed for reboots; config backup is the gap (see below)</td>
+</tr>
+<tr>
+<td><strong>pihole3</strong> @ 192.168.1.4</td>
+<td>LAN DNS only (no DHCP)</td>
+<td>own box</td>
+<td>none; boots independently. While it's off, LAN has no DNS</td>
+</tr>
+<tr>
+<td><strong>ghost</strong> @ 192.168.1.9</td>
+<td>docker host (~126 containers, ~57 compose projects), libvirt (homeassistant VM), SigNoz, traefik, Forgejo, Komodo core, Gotify</td>
+<td>nvme root + ZFS pools <code>tank</code> (primary, encrypted, 87% full), <code>harbor</code> (local mirror replica, encrypted), <code>frigate-media</code></td>
+<td>ZFS key-load → mount → docker ordering is unguarded (below)</td>
+</tr>
+<tr>
+<td><strong>ghost-vault</strong></td>
+<td>offsite-style ZFS replica of ghost + observability forwarders</td>
+<td><code>tank</code> 3.6T</td>
+<td>docker.socket-enabled — comes back fine</td>
+</tr>
+<tr>
+<td><strong>aurora</strong></td>
+<td>desktop, distrobox dev, ollama/stable-diffusion, MCP containers, restic client</td>
+<td>ext4/ZFS mix</td>
+<td>linger on, docker.socket enabled — comes back; leaked MCP containers are cosmetic</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-flow-backups">Data flow (backups)<a class="headerlink" href="#data-flow-backups" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>tank/encrypted (ghost, live)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ├─ sanoid snapshots (local, ~15min/daily/weekly per template)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  ├─ syncoid → harbor/encrypted (ghost, same chassis) hourly — ALL children
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ├─ syncoid → ghost-vault:tank/encrypted hourly — SUBSET (see gaps)
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  └─ restic daily: aurora /home/nic → sftp:ghost:/tank/encrypted/nas/nic-home
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>       (covers all working repos, .env files, dotfiles — then replicated
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        onward by the zfs copies above)
+</span></code></pre></div>
+<p>Replication health pings healthchecks.io per-leg; failures also push Gotify.</p>
+<h2 id="what-happens-on-a-power-cut-power-restore">What happens on a power cut + power restore<a class="headerlink" href="#what-happens-on-a-power-cut-power-restore" title="Permanent link">&para;</a></h2>
+<h3 id="comes-back-automatically-verified-live">Comes back automatically (verified live)<a class="headerlink" href="#comes-back-automatically-verified-live" title="Permanent link">&para;</a></h3>
+<ul>
+<li>ghost: ssh.socket ✓, tailscaled ✓, docker (+socket) ✓, libvirtd ✓,
+  115 <code>unless-stopped</code> + 11 <code>always</code> containers ✓, ZFS file-keyed datasets
+  mount via <code>zfs-load-key.service</code> (key at <code>/home/nic/.zfs.tank.key</code>)</li>
+<li>homeassistant VM — <strong>autostart now enabled</strong> (was disabled; fixed today)</li>
+<li>ghost-vault: tailscaled ✓, docker.socket ✓, collectors restart</li>
+<li>aurora: linger ✓, tailscaled ✓, docker.socket ✓, user units (collie,
+  devin-dream, nas-backup timer) survive without login</li>
+<li>OPNsense + pihole: independent appliances, self-boot</li>
+<li>Komodo periphery/core are containers — they return with docker</li>
+</ul>
+<h3 id="does-not-come-back-needs-attention">Does NOT come back / needs attention<a class="headerlink" href="#does-not-come-back-needs-attention" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong><code>zfs-load-key.service</code> fails every boot</strong> — <code>zfs load-key -ra</code> tries the
+   <code>keylocation=prompt</code> children of <code>harbor/encrypted</code> (~12 stale datasets,
+   all unmounted leftovers from the tank migration) and fails non-interactively.
+   File-keyed datasets still load, so it's noisy-not-fatal <strong>today</strong> — but it
+   means a real key failure would also be ignored, and nothing alerts.</li>
+<li><strong>docker↔ZFS ordering gate exists but is toothless.</strong> Ghost has
+   <code>docker-wait-for-zfs.service</code> (<code>Before=docker.service</code>, <code>After=zfs.target</code>)
+   and critical-chain confirms docker waits for <code>zfs.target</code> at boot. Two
+   defects remain: (a) <code>ExecStart=/bin/true</code> — it never verifies keys loaded
+   or datasets mounted, so a key failure still means docker starts against
+   empty bind-mount dirs (this already happened once — the root-owned
+   skeleton at <code>~/projects/personal/homelab-mono</code> on ghost); (b) the unit has
+   <code>RequiredBy=docker.service</code> in <code>[Unit]</code>, which systemd <strong>ignores</strong>
+   (journal: "Unknown key name") — the gate only engages because it's
+   <code>WantedBy=multi-user.target</code>; a manual <code>systemctl start docker</code> bypasses
+   it. Fix below.</li>
+<li><strong><code>meme-search-pro</code></strong> — a stray <code>docker run</code> Rails container (not in any
+   compose file). restart policy now set; decide if it's keeping.</li>
+<li><strong><code>forjeo-db-1</code></strong> — orphan postgres from a typo'd duplicate of forgejo
+   (<code>/var/home/...</code>, <code>restart=always</code>). Verify it's unused, remove.</li>
+<li><strong>No deadman's switch for ghost itself.</strong> Gotify, SigNoz, traefik all live
+   ON ghost — during a ghost outage nothing can notify you. hc-ping covers
+   replication legs only. Add a "ghost-alive" check (below).</li>
+<li><strong>Vault replication coverage — fixed 2026-10-19.</strong> ghost-vault now
+   receives every docker/* control dataset (forjeo, komodo, karakeep,
+   repoflow, temporal, signoz — the earlier gap) plus <code>nas/games</code> and
+   <code>nas/nic-home</code> (the restic repo, ~774G). Deliberately excluded (vault is
+   3.6TiB, keep &lt;75%): <code>nas/media</code> (7.2T replaceable bulk), <code>tdarr_cache</code>,
+   dormant VM disks (ubuntu22-sandbox, win10, talos01, digital-harbor,
+   block-subnet-router, try-cockpit). Exclusions are documented at the top
+   of <code>zfs-ops/hosts/ghost-vault/syncoid-replication.sh</code>.</li>
+<li><strong><code>harbor</code> pool has 1 permanent data error</strong> (post-resilver; the spare
+   drive was consumed — cron already reminds you Oct 10 to buy one).
+   <code>sudo zpool status -v harbor</code> to see the file. It's a replica copy — low
+   urgency, but it is not self-healing.</li>
+<li><strong>No ZFS scrub timers enabled</strong> — <code>zfs-scrub-monthly@.timer</code> etc. are
+   disabled; last scrubs were manual (Oct 11–12). Enable monthly scrubs.</li>
+<li><strong><code>systemd-networkd-wait-online</code> failed</strong> — networking-online ordering is
+   unreliable on ghost; mostly cosmetic but don't depend on it.</li>
+<li><strong>Secrets</strong>: stack <code>.env</code> files are gitignored. Ghost-side <code>.env</code>s live
+    inside their <code>*-zfs</code> datasets (covered by harbor; only partially by
+    vault). Aurora-side <code>.env</code>s are in <code>/home/nic</code> → restic daily. No
+    additional action needed once vault coverage is extended.</li>
+<li><strong>OPNsense config backup</strong> — export or API-backup the config to the
+    restic path; the router reboots fine, but its config is the thing you'd
+    miss if the box died.</li>
+<li><strong>BIOS power-on-AC-loss</strong> — verify on next physical visit for ghost,
+    ghost-vault, router, pihole. Can't check remotely; essential for
+    unattended power cuts.</li>
+<li><strong>Docker on aurora starts via socket activation</strong> (<code>docker.service</code>
+    disabled, <code>docker.socket</code> enabled). Works today; one odd boot could
+    leave containers down until something pokes the API. <code>sudo systemctl
+    enable --now docker.service</code> removes the fragility.</li>
+<li><strong>Stale cruft</strong>: <code>babyblue</code>/<code>babyblue-aurora</code> tailnet entries (offline),
+    ~60 leaked MCP containers on aurora, dead compose projects (minecraft,
+    cannalyze, test-nginx, cloudflared-santa). Cosmetic; clean when bored.</li>
+<li><strong>tank at 87%</strong> — ZFS degrades past ~90%; plan a cleanup pass
+    (<code>nas/dump</code>, <code>games</code>, <code>torrents</code> are the likely bulk).</li>
+</ol>
+<h2 id="shutdown-order">Shutdown order<a class="headerlink" href="#shutdown-order" title="Permanent link">&para;</a></h2>
+<p>Physical move or full power cut:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>1. pihole        — nothing depends on it mid-move; shutdown whenever
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>2. ghost         — virsh shutdown homeassistant (ACPI; give it ~60s)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>                   optional grace: docker stop $(docker ps -q) — or just
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                   let systemd do it; then shutdown -h now
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>3. ghost-vault   — shutdown -h now (mid-replication is safe; syncoid resumes)
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>4. aurora        — normal desktop shutdown
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>5. OPNsense      — shutdown from UI or power button; goes last so you keep
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                   DHCP/DNS/gateway while the rest go down
+</span></code></pre></div>
+<h2 id="startup-order">Startup order<a class="headerlink" href="#startup-order" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>1. OPNsense   — wait for web UI + WAN up
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>2. pihole     — DNS back for the LAN
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>3. ghost      — boots itself: zfs import → load-key → mount → docker
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>4. ghost-vault
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>5. aurora
+</span></code></pre></div>
+<p>Then run the verification script (below) — do NOT eyeball it.</p>
+<h2 id="verification">Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>scripts/maintenance/ghost-preflight.sh
+</span></code></pre></div>
+<p>Checks: pool health, key status, mounts, enabled boot units, container
+restart policies, VM autostart, replication freshness, failed units, disk
+headroom — on ghost and ghost-vault. Run it <strong>before</strong> shutdown (baseline)
+and <strong>after</strong> power-on; diff the output. Green = walk away.</p>
+<h2 id="fixes-to-apply-need-sudo-on-ghost-accounts">Fixes to apply (need sudo on ghost / accounts)<a class="headerlink" href="#fixes-to-apply-need-sudo-on-ghost-accounts" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Fixes 1–4 (docker-wait-for-zfs hardening, monthly scrubs, harbor -v</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># error list, aurora docker.service) are wrapped in a wizard that applies</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># them over ssh with one sudo prompt and re-runs the preflight after:</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>scripts/maintenance/harden-ghost-boot.sh
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># 5. External deadman: create an hc-ping check "ghost-alive" (5 min),</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1">#    then on ghost add to crontab:</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1">#    */5 * * * * curl -fsm5 https://hc-ping.com/&lt;uuid&gt;/ghost-alive</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1">#    healthchecks alerts you when it goes quiet — works even when</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1">#    gotify/signoz are down with ghost.</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1"># 6. OPNsense config backup: UI → System → Configuration → Backups →</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1">#    download; or API GET /api/core/backup/download. Drop the file in</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="c1">#    ~/backups/opnsense (restic picks it up nightly).</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="c1"># 7. Vault coverage — DONE (2026-10-19, zfs-ops d70ae53). First sends run</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="c1">#    on the hourly timer; ~855G initial transfer, a few hours over LAN.</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="c1">#    Verify later: ssh ghost-vault 'zfs list -r tank/encrypted/docker'</span>
+</span></code></pre></div>
+<h2 id="incident-log">Incident log<a class="headerlink" href="#incident-log" title="Permanent link">&para;</a></h2>
+<h3 id="2026-10-21-zfs-kernel-panic-hard-reboot">2026-10-21 — ZFS kernel panic + hard reboot<a class="headerlink" href="#2026-10-21-zfs-kernel-panic-hard-reboot" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> All I/O on <code>tank</code> froze mid-afternoon. Load hit ~650; ~15
+processes (postgres, apache, minio, both zfs sends) stuck in D state;
+pool reported 0 IOPS while disks sat idle with zero hardware errors.</p>
+<p><strong>Cause:</strong> Kernel logged <code>PANIC: tank: blkptr ... has invalid TYPE 62</code> —
+a write thread hit a corrupted block pointer and wedged inside
+<code>zfs_panic_recover</code>. Hardware was clean; this was metadata corruption
+already present on the pool (tank had flagged data errors before the
+crash). Concurrent sanoid + harbor-sync + vault-pull traffic was the
+likely trigger that walked into it, not the cause.</p>
+<p><strong>Recovery:</strong> <code>sudo reboot</code>. Shutdown stalled on the frozen pool; box
+needed a hard power cut. Pool imported cleanly on boot (no panic
+replay). <code>signoz-clickhouse</code> crash-looped post-boot: 106 empty broken
+parts on <code>signoz_metrics.time_series_v4_6hrs</code> exceeded the
+<code>max_suspicious_broken_parts</code> limit (default ~100) so the table refused
+to attach. Fix: temporarily raise the limit in
+<code>signoz-zfs/config/clickhouse-config.xml</code> (<code>&lt;merge_tree&gt;</code> block is
+already there, commented), <code>docker restart</code>, confirm healthy, revert
+the config. No sudo needed — that config dir is nic-owned.</p>
+<p><strong>Outcome:</strong> Full recovery. Preflight 32 PASS / 3 known WARN / 0 FAIL.
+Bonus: sanoid's aggressive <code>media</code> template pruned ~3.2T of
+snapshot-pinned data post-reboot — tank dropped from 87% to 60%.</p>
+<p><strong>Still open:</strong>
+- <code>tank</code> has 2 data errors, <code>harbor</code> 1 — files unidentified until
+  <code>sudo zpool status -v &lt;pool&gt;</code> (root-only output; wizard covers it)
+- The corrupt metadata still exists — a future write hitting the same
+  path <strong>can panic again</strong>. Priority: identify the objects, run a scrub,
+  restore the damaged files from harbor/vault replicas if real data.
+- Consider pausing <code>harbor-replication.timer</code> until <code>status -v</code> is read
+  if you want zero risk of re-triggering before the damage is known.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../platform/instructions/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Stuff">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Stuff
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 The authors
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["announce.dismiss","content.code.annotate","content.code.copy","content.code.select","content.footnote.tooltips","content.tabs.link","content.tooltips","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.sections","navigation.top","navigation.tracking","search.highlight"],"redirect":null,"search":"../../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a2388154.min.js"></script>
+      
+    
+  </body>
+</html>

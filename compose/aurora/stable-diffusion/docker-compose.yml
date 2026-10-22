@@ -1,0 +1,24 @@
+services:
+  auto:
+    image: sd-auto:78
+    # build: /home/nic/projects/personal/stable-diffusion-webui-docker/services/AUTOMATIC1111
+    container_name: stable-diffusion
+    ports:
+      - "7860:7860"
+    volumes:
+      - /var/docker-storage-zfs/sd/data:/data
+      - /var/docker-storage-zfs/sd/output:/output
+    stop_signal: SIGKILL
+    tty: true
+    mem_limit: 12g
+    memswap_limit: 12g
+    environment:
+      - CLI_ARGS=--allow-code --xformers --enable-insecure-extension-access --api
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [compute, utility]
+    restart: unless-stopped

@@ -1,0 +1,26 @@
+services:
+  web:
+    image: nginx:alpine
+    container_name: dreams
+    volumes:
+      - /tank/encrypted/docker/dreams/www:/usr/share/nginx/html:ro
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dreams.entrypoints: "websecure"
+      traefik.http.routers.dreams.rule: "Host(`dreams.paynepride.com`)"
+      traefik.http.routers.dreams.tls.certresolver: letsencrypt
+      traefik.http.routers.dreams.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.dreams.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.dreams.loadbalancer.server.port: "80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  phantomlink:
+    external: true
