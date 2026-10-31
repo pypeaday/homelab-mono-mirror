@@ -1,0 +1,486 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "enabledManagers": [
+    "docker-compose"
+  ],
+  "dependencyDashboard": false,
+  "automerge": false,
+  "timezone": "America/Chicago",
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 5,
+  "packageRules": [
+    {
+      "matchDepNames": [
+        "qmcgaw/gluetun",
+        "netdata/netdata",
+        "nicolargo/glances",
+        "lissy93/domain-locker",
+        "pypeaday/archivebox-telegram-bot",
+        "ghcr.io/neonwatty/image_to_text_generator"
+      ],
+      "enabled": false
+    },
+    {
+      "matchManagers": [
+        "docker-compose"
+      ],
+      "groupName": "compose misc",
+      "groupSlug": "compose-misc"
+    },
+    {
+      "matchFileNames": [
+        "compose/aurora/komodo-periphery/**"
+      ],
+      "groupName": "compose/aurora/komodo-periphery images",
+      "groupSlug": "compose-aurora-komodo-periphery"
+    },
+    {
+      "matchFileNames": [
+        "compose/aurora/stable-diffusion/**"
+      ],
+      "groupName": "compose/aurora/stable-diffusion images",
+      "groupSlug": "compose-aurora-stable-diffusion"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/ai/**"
+      ],
+      "groupName": "compose/babyblue/ai images",
+      "groupSlug": "compose-babyblue-ai"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/beszel/**"
+      ],
+      "groupName": "compose/babyblue/beszel images",
+      "groupSlug": "compose-babyblue-beszel"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/code-server/**"
+      ],
+      "groupName": "compose/babyblue/code-server images",
+      "groupSlug": "compose-babyblue-code-server"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/developer-stack/**"
+      ],
+      "groupName": "compose/babyblue/developer-stack images",
+      "groupSlug": "compose-babyblue-developer-stack"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/immich-remote-ml/**"
+      ],
+      "groupName": "compose/babyblue/immich-remote-ml images",
+      "groupSlug": "compose-babyblue-immich-remote-ml"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/kotaemon/**"
+      ],
+      "groupName": "compose/babyblue/kotaemon images",
+      "groupSlug": "compose-babyblue-kotaemon"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/monitoring-visibility/**"
+      ],
+      "groupName": "compose/babyblue/monitoring-visibility images",
+      "groupSlug": "compose-babyblue-monitoring-visibility"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/portainer-agent/**"
+      ],
+      "groupName": "compose/babyblue/portainer-agent images",
+      "groupSlug": "compose-babyblue-portainer-agent"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/tdarr/**"
+      ],
+      "groupName": "compose/babyblue/tdarr images",
+      "groupSlug": "compose-babyblue-tdarr"
+    },
+    {
+      "matchFileNames": [
+        "compose/babyblue/timetracker/**"
+      ],
+      "groupName": "compose/babyblue/timetracker images",
+      "groupSlug": "compose-babyblue-timetracker"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/actual/**"
+      ],
+      "groupName": "compose/ghost/actual images",
+      "groupSlug": "compose-ghost-actual"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/affine/**"
+      ],
+      "groupName": "compose/ghost/affine images",
+      "groupSlug": "compose-ghost-affine"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/apprise/**"
+      ],
+      "groupName": "compose/ghost/apprise images",
+      "groupSlug": "compose-ghost-apprise"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/archivebox/**"
+      ],
+      "groupName": "compose/ghost/archivebox images",
+      "groupSlug": "compose-ghost-archivebox"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/arrs/**"
+      ],
+      "groupName": "compose/ghost/arrs images",
+      "groupSlug": "compose-ghost-arrs"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/beszel/**"
+      ],
+      "groupName": "compose/ghost/beszel images",
+      "groupSlug": "compose-ghost-beszel"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/chatgpt-telegram-bot/**"
+      ],
+      "groupName": "compose/ghost/chatgpt-telegram-bot images",
+      "groupSlug": "compose-ghost-chatgpt-telegram-bot"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/code-server/**"
+      ],
+      "groupName": "compose/ghost/code-server images",
+      "groupSlug": "compose-ghost-code-server"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/container-registry/**"
+      ],
+      "groupName": "compose/ghost/container-registry images",
+      "groupSlug": "compose-ghost-container-registry"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/domain-locker/**"
+      ],
+      "groupName": "compose/ghost/domain-locker images",
+      "groupSlug": "compose-ghost-domain-locker"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/duplicati/**"
+      ],
+      "groupName": "compose/ghost/duplicati images",
+      "groupSlug": "compose-ghost-duplicati"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/eigenfocus/**"
+      ],
+      "groupName": "compose/ghost/eigenfocus images",
+      "groupSlug": "compose-ghost-eigenfocus"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/forgejo/**"
+      ],
+      "groupName": "compose/ghost/forgejo images",
+      "groupSlug": "compose-ghost-forgejo"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/forgejo-kanboard-bridge/**"
+      ],
+      "groupName": "compose/ghost/forgejo-kanboard-bridge images",
+      "groupSlug": "compose-ghost-forgejo-kanboard-bridge"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/freshrss/**"
+      ],
+      "groupName": "compose/ghost/freshrss images",
+      "groupSlug": "compose-ghost-freshrss"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/frigate/**"
+      ],
+      "groupName": "compose/ghost/frigate images",
+      "groupSlug": "compose-ghost-frigate"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/gotify/**"
+      ],
+      "groupName": "compose/ghost/gotify images",
+      "groupSlug": "compose-ghost-gotify"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/grist/**"
+      ],
+      "groupName": "compose/ghost/grist images",
+      "groupSlug": "compose-ghost-grist"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/homebox/**"
+      ],
+      "groupName": "compose/ghost/homebox images",
+      "groupSlug": "compose-ghost-homebox"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/homelab-stack/**"
+      ],
+      "groupName": "compose/ghost/homelab-stack images",
+      "groupSlug": "compose-ghost-homelab-stack"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/images.pype.dev/**"
+      ],
+      "groupName": "compose/ghost/images.pype.dev images",
+      "groupSlug": "compose-ghost-images.pype.dev"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/immich/**"
+      ],
+      "groupName": "compose/ghost/immich images",
+      "groupSlug": "compose-ghost-immich"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/immich-memes/**"
+      ],
+      "groupName": "compose/ghost/immich-memes images",
+      "groupSlug": "compose-ghost-immich-memes"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/installer/**"
+      ],
+      "groupName": "compose/ghost/installer images",
+      "groupSlug": "compose-ghost-installer"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/kanboard/**"
+      ],
+      "groupName": "compose/ghost/kanboard images",
+      "groupSlug": "compose-ghost-kanboard"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/karakeep/**"
+      ],
+      "groupName": "compose/ghost/karakeep images",
+      "groupSlug": "compose-ghost-karakeep"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/komodo/**"
+      ],
+      "groupName": "compose/ghost/komodo images",
+      "groupSlug": "compose-ghost-komodo"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/linkding/**"
+      ],
+      "groupName": "compose/ghost/linkding images",
+      "groupSlug": "compose-ghost-linkding"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/manyfold/**"
+      ],
+      "groupName": "compose/ghost/manyfold images",
+      "groupSlug": "compose-ghost-manyfold"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/media-stack/**"
+      ],
+      "groupName": "compose/ghost/media-stack images",
+      "groupSlug": "compose-ghost-media-stack"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/meme-search/**"
+      ],
+      "groupName": "compose/ghost/meme-search images",
+      "groupSlug": "compose-ghost-meme-search"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/minio/**"
+      ],
+      "groupName": "compose/ghost/minio images",
+      "groupSlug": "compose-ghost-minio"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/monitoring-visibility/**"
+      ],
+      "groupName": "compose/ghost/monitoring-visibility images",
+      "groupSlug": "compose-ghost-monitoring-visibility"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/nextcloud/**"
+      ],
+      "groupName": "compose/ghost/nextcloud images",
+      "groupSlug": "compose-ghost-nextcloud"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/nostr-relay/**"
+      ],
+      "groupName": "compose/ghost/nostr-relay images",
+      "groupSlug": "compose-ghost-nostr-relay"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/observability/**"
+      ],
+      "groupName": "compose/ghost/observability images",
+      "groupSlug": "compose-ghost-observability"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/paperless-ngx/**"
+      ],
+      "groupName": "compose/ghost/paperless-ngx images",
+      "groupSlug": "compose-ghost-paperless-ngx"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/portainer/**"
+      ],
+      "groupName": "compose/ghost/portainer images",
+      "groupSlug": "compose-ghost-portainer"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/postiz/**"
+      ],
+      "groupName": "compose/ghost/postiz images",
+      "groupSlug": "compose-ghost-postiz"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/re-director/**"
+      ],
+      "groupName": "compose/ghost/re-director images",
+      "groupSlug": "compose-ghost-re-director"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/reels/**"
+      ],
+      "groupName": "compose/ghost/reels images",
+      "groupSlug": "compose-ghost-reels"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/schnese-loan/**"
+      ],
+      "groupName": "compose/ghost/schnese-loan images",
+      "groupSlug": "compose-ghost-schnese-loan"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/searxng/**"
+      ],
+      "groupName": "compose/ghost/searxng images",
+      "groupSlug": "compose-ghost-searxng"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/stirlingtools/**"
+      ],
+      "groupName": "compose/ghost/stirlingtools images",
+      "groupSlug": "compose-ghost-stirlingtools"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/syncthing/**"
+      ],
+      "groupName": "compose/ghost/syncthing images",
+      "groupSlug": "compose-ghost-syncthing"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/temporalio/**"
+      ],
+      "groupName": "compose/ghost/temporalio images",
+      "groupSlug": "compose-ghost-temporalio"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/traefik/**"
+      ],
+      "groupName": "compose/ghost/traefik images",
+      "groupSlug": "compose-ghost-traefik"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/twenty/**"
+      ],
+      "groupName": "compose/ghost/twenty images",
+      "groupSlug": "compose-ghost-twenty"
+    },
+    {
+      "matchFileNames": [
+        "compose/ghost/wallos/**"
+      ],
+      "groupName": "compose/ghost/wallos images",
+      "groupSlug": "compose-ghost-wallos"
+    },
+    {
+      "matchFileNames": [
+        "dataops/systemd/restic-docker-compose/**"
+      ],
+      "groupName": "dataops/systemd/restic-docker-compose images",
+      "groupSlug": "dataops-systemd-restic-docker-compose"
+    },
+    {
+      "matchFileNames": [
+        "infrastructure/notifiq.net/**"
+      ],
+      "groupName": "infrastructure/notifiq.net images",
+      "groupSlug": "infrastructure-notifiq.net"
+    },
+    {
+      "matchFileNames": [
+        "infrastructure/paynepride.com/**"
+      ],
+      "groupName": "infrastructure/paynepride.com images",
+      "groupSlug": "infrastructure-paynepride.com"
+    }
+  ]
+}

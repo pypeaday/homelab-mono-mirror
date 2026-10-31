@@ -1,0 +1,383 @@
+- Media:
+    - Jellyfin:
+        href: https://jellyfin.paynepride.com
+        description: Movies & TV
+        icon: jellyfin.png
+    - Jellyseerr:
+        href: https://jellyseerr.paynepride.com
+        description: Request something
+        icon: jellyseerr.png
+    - Ombi:
+        href: https://ombi.paynepride.com
+        description: Requests
+        icon: ombi.png
+    - Audiobookshelf:
+        href: https://audiobookshelf.paynepride.com
+        description: Audiobooks & podcasts
+        icon: audiobookshelf.png
+    - Immich:
+        href: https://immich.paynepride.com
+        description: Photos
+        icon: immich.png
+    - Memes:
+        href: https://memes.paynepride.com
+        description: Meme library
+        icon: immich.png
+    - Pinchflat:
+        href: https://pinchflat.paynepride.com
+        description: YouTube archive
+        icon: pinchflat.png
+    - Ubooquity:
+        href: https://ubooquity.paynepride.com
+        description: Books & comics
+        icon: ubooquity.png
+    - Spotify:
+        href: https://open.spotify.com/
+        icon: spotify.png
+
+- Cloud & Files:
+    - Nextcloud:
+        href: https://nextcloud.paynepride.com
+        description: Files, calendar, contacts
+        icon: nextcloud.png
+    - Paperless:
+        href: https://paperless.paynepride.com
+        description: Documents
+        icon: paperless-ngx.png
+    - Karakeep:
+        href: https://karakeep.paynepride.com
+        description: Bookmarks & read-later
+        icon: karakeep.png
+    - Linkding:
+        href: https://linkding.paynepride.com/bookmarks
+        description: Link archive
+        icon: linkding.png
+    - Homebox:
+        href: https://homebox.paynepride.com
+        description: Home inventory
+        icon: homebox.png
+    - FreshRSS:
+        href: https://freshrss.paynepride.com
+        description: RSS reader
+        icon: freshrss.png
+    - Syncthing:
+        href: https://syncthing.paynepride.com
+        description: File sync
+        icon: syncthing.png
+    - ArchiveBox:
+        href: https://archivebox.paynepride.com
+        description: Web archive
+        icon: archivebox.png
+    - Minio:
+        href: https://minio.paynepride.com
+        description: Object storage
+        icon: minio.png
+
+- Apps:
+    - Kanboard:
+        href: https://kanboard.paynepride.com
+        description: Task boards
+        icon: kanboard.png
+    - Twenty CRM:
+        href: https://app.crm.paynepride.com
+        description: CRM
+    - Grist:
+        href: https://grist.paynepride.com
+        description: Spreadsheets
+        icon: grist.png
+    - Manyfold:
+        href: https://manyfold.paynepride.com
+        description: 3D prints
+        icon: manyfold.png
+    - Wallos:
+        href: https://wallos.paynepride.com
+        description: Subscriptions
+        icon: wallos.png
+    - Stirling PDF:
+        href: https://stirlingtools.paynepride.com
+        description: PDF tools
+        icon: stirling-pdf.png
+    - Domain Locker:
+        href: https://domain-locker.paynepride.com
+        description: Domain expiry
+    - Affine:
+        href: https://affine.paynepride.com
+        description: Notes
+        icon: affine.png
+    - SearXNG:
+        href: https://searxng.paynepride.com
+        description: Private search
+        icon: searxng.png
+
+- Smart Home:
+    - Home Assistant:
+        href: https://homeassistant.paynepride.com
+        description: Automation
+        icon: home-assistant.png
+    - Frigate:
+        href: https://frigate.paynepride.com
+        description: Cameras
+        icon: frigate.png
+
+- Bookmarks:
+    - Bitwarden:
+        href: https://www.bitwarden.com
+        icon: bitwarden.png
+    - Proton Mail:
+        href: https://mail.protonmail.com/
+        icon: proton.png
+    - Logos:
+        href: https://app.logos.com
+        description: Bible study
+    - Appleton Utilities:
+        href: https://cityofappletonwi.municipalonlinepayments.com
+        description: Bill pay
+    - Aquahawk:
+        href: https://applwi.aquahawk.us/
+        description: Water usage
+    - GitHub:
+        href: https://github.com/pypeaday
+        icon: github.png
+
+- Church:
+    - Weebly:
+        href: https://www.weebly.com/app/front-door/signin?path=login#/
+        description: Site admin
+    - Sermon Upload:
+        href: https://nextcloud.paynepride.com/apps/files/files/993794
+        icon: nextcloud.png
+    - Sermons:
+        href: https://sermons.paynepride.com
+        description: Sermon prep
+        icon: google-docs.png
+    - CCLI:
+        href: https://docs.google.com/spreadsheets/d/1-nPRo68IiSbJn9hF_EVo
+        icon: google-sheets.png
+    - Setlists:
+        href: https://docs.google.com/spreadsheets/d/1x-0TRXQqs3_n1VgP2c_p
+        icon: google-sheets.png
+    - Service Sign Ups:
+        href: https://docs.google.com/spreadsheets/d/1rFuXeDzWZND8ihxUmvo-
+        icon: google-sheets.png
+    - Lyrics:
+        href: https://docs.google.com/document/d/1xM6EsmcZrWKycEC4K7fuHpyw
+        icon: google-docs.png
+    - Calendar Homepage:
+        href: https://church-calendar-homepage.paynepride.com
+        description: Church calendar
+        icon: google-calendar.png
+
+- Finances:
+    - Actual Budget:
+        href: https://actual.paynepride.com
+        icon: actual-budget.png
+    - Actual Dash:
+        href: https://budget.paynepride.com
+        description: Budget dashboard
+        icon: actual-budget.png
+    - Edvest 529:
+        href: https://www.edvest-529.com/widtpl/auth/ll.cs
+        description: College savings
+    - RightCapital:
+        href: https://app.rightcapital.com/account/login
+    - Wealth:
+        href: https://app.wealth.com/login
+    - Altruist:
+        href: https://app.altruist.com/login
+
+- Monitoring:
+    - SigNoz:
+        href: https://signoz.paynepride.com
+        description: Traces, metrics, logs
+        icon: signoz.png
+    - Alert Triage:
+        href: https://triage.paynepride.com
+        description: Alert filter
+        icon: gotify.png
+    - Listener:
+        href: https://listen.paynepride.com
+        description: Event listener
+        icon: gotify.png
+    - OTEL Ingest:
+        href: https://otel.paynepride.com
+        description: Telemetry intake
+    - OpenSearch:
+        href: https://opensearch.paynepride.com
+        icon: opensearch.png
+    - Temporal:
+        href: https://temporal-ui.paynepride.com
+        description: Workflows
+    - Cronicle:
+        href: https://cronicle.paynepride.com
+        description: Scheduled jobs
+        icon: cronicle.png
+    - Status:
+        href: https://status.paynepride.com
+        description: Status page
+        icon: uptime-kuma.png
+    - Beszel:
+        href: https://beszel.paynepride.com
+        description: Host metrics
+        icon: beszel.png
+    - Glances:
+        href: https://glances.paynepride.com
+        icon: glances.png
+    - Gotify:
+        href: https://gotify.paynepride.com
+        icon: gotify.png
+    - Healthchecks:
+        href: https://healthchecks.io/
+        icon: healthchecks.png
+
+- Media Tools:
+    - Sonarr:
+        href: https://sonarr.paynepride.com
+        icon: sonarr.png
+    - Radarr:
+        href: https://radarr.paynepride.com
+        icon: radarr.png
+    - Lidarr:
+        href: https://lidarr.paynepride.com
+        icon: lidarr.png
+    - Readarr:
+        href: https://readarr.paynepride.com
+        icon: readarr.png
+    - AudioReadarr:
+        href: https://audioreadarr.paynepride.com
+        icon: readarr.png
+    - Bazarr:
+        href: https://bazarr.paynepride.com
+        icon: bazarr.png
+    - Prowlarr:
+        href: https://prowlarr.paynepride.com
+        icon: prowlarr.png
+    - Transmission:
+        href: https://transmission_openvpn.paynepride.com/transmission/web
+        icon: transmission.png
+    - Tdarr:
+        href: https://tdarr.paynepride.com
+        icon: tdarr.png
+    - Jellystat:
+        href: https://jellystat.paynepride.com
+        description: Jellyfin stats
+        icon: jellyfin.png
+
+- Projects:
+    - Soonish:
+        href: https://soonish.paynepride.com
+        description: Reminders
+    - LittleLink:
+        href: https://littlelink.paynepride.com
+        description: Link-in-bio
+    - i:
+        href: https://i.paynepride.com
+        description: Landing
+    - Blog:
+        href: https://blog.paynepride.com
+        icon: ghost.png
+    - Names API:
+        href: https://names.paynepride.com
+    - Quadtask:
+        href: https://quadtask.paynepride.com
+    - Schnese Loans:
+        href: https://schnese.paynepride.com
+        description: Loan tracker
+    - GWL Marg Tracker:
+        href: https://gwl-marg-tracker.paynepride.com
+    - Blantons:
+        href: https://blantons.paynepride.com
+        description: Whiskey tracker
+    - Clocks:
+        href: https://clocks.paynepride.com
+    - Dad Can I Wear:
+        href: https://dad-can-i-wear-this.paynepride.com
+    - Santa Tracker:
+        href: https://santa-tracker.paynepride.com
+    - Dreams:
+        href: https://dreams.paynepride.com
+        description: Dream pipeline
+    - Reels:
+        href: https://reels.paynepride.com
+    - Collie:
+        href: https://collie.paynepride.com
+    - Speakr:
+        href: https://speakr.paynepride.com
+    - Shotput:
+        href: https://shotput.paynepride.com
+    - GH Star Sorter:
+        href: https://gh-star-sorter.paynepride.com
+        icon: github.png
+    - Meme Search:
+        href: https://meme-search.paynepride.com
+    - Audiomass:
+        href: https://audiomass.paynepride.com
+        description: Audio editor
+    - Open WebUI:
+        href: https://openwebui.paynepride.com
+        icon: open-webui.png
+    - Stable Diffusion:
+        href: https://stable-diffusion2.paynepride.com
+    - Code Server:
+        href: https://code.paynepride.com
+        icon: visual-studio-code.png
+    - Registry UI:
+        href: https://registry-ui.paynepride.com
+        icon: docker.png
+    - RR:
+        href: https://rr.paynepride.com
+
+- Dev:
+    - Forgejo:
+        href: https://git.paynepride.com
+        icon: forgejo.png
+    - pype.dev:
+        href: https://pype.dev
+        description: Blog
+    - Small Group Notes:
+        href: https://pypeaday.github.io/small-group-notes/
+        icon: obsidian.png
+    - SadServers:
+        href: https://sadservers.com/scenarios
+        description: Linux puzzles
+    - Namecheap:
+        href: https://ap.www.namecheap.com/
+        icon: namecheap.png
+    - EOL Repo:
+        href: https://github.com/pypeaday/eol-dr
+        description: If I die
+        icon: github.png
+
+- Infra:
+    - Komodo:
+        href: https://komodo.paynepride.com
+        icon: komodo.png
+    - Portainer:
+        href: https://portainer.paynepride.com
+        icon: portainer.png
+    - Pi-hole:
+        href: https://pihole.paynepride.com
+        icon: pi-hole.png
+    - Traefik:
+        href: http://ghost:8083/dashboard/
+        icon: traefik.png
+    - OPNSense:
+        href: https://192.168.1.1:8443/
+        icon: opnsense.png
+    - JetKVM:
+        href: http://192.168.1.135/login-local
+        icon: jetkvm.png
+    - Cockpit:
+        href: https://cockpit.paynepride.com
+        icon: cockpit.png
+    - Registry:
+        href: https://registry.paynepride.com
+        icon: docker.png
+    - Cloudflare:
+        href: https://dash.cloudflare.com/
+        icon: cloudflare.png
+    - Simplelogin:
+        href: https://app.simplelogin.io/dashboard/
+        icon: simplelogin.png
+    - Ollama:
+        href: http://ghost:11434
+        icon: ollama.png

@@ -1,0 +1,56 @@
+services:
+  # The pretty viewer — harbor-themed gallery at reels.paynepride.com.
+  gallery:
+    build: .
+    container_name: reels-gallery
+    environment:
+      TZ: "America/Chicago"
+    volumes:
+      - "/tank/encrypted/nas/media/reels:/reels:ro"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: "256m"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.reels.rule: Host(`reels.paynepride.com`)
+      traefik.http.routers.reels.tls.certresolver: letsencrypt
+      traefik.http.routers.reels.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.reels.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.reels.loadbalancer.server.port: "8788"
+    networks:
+      - phantomlink
+
+  # The plumbing — uploads, indexing, share links. LAN only.
+  copyparty:
+    image: copyparty/ac:latest # alpine + ffmpeg (video thumbnails)
+    container_name: reels-copyparty
+    ports:
+      - "8095:3923"
+    environment:
+      TZ: "America/Chicago"
+    env_file: .env # REELS_PASS — write password
+    command:
+      - "-a"         # account: nic can read+write
+      - "nic:${REELS_PASS}"
+      - "-v"         # anon reads, nic writes (mounted at URL root)
+      - "/w::r:rw,nic"
+      - "-e2dsa"     # scan dir on change — dropped files appear
+      - "-e2ts"
+      - "--th-ram-max=8"
+      - "--grid"     # thumbnail grid view
+      - "--theme=2"  # dark
+    volumes:
+      - "/tank/encrypted/nas/media/reels:/w:rw"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: "1g"
+    networks:
+      - phantomlink
+
+networks:
+  phantomlink:
+    external: true

@@ -1,0 +1,33 @@
+services:
+  app:
+    image: git.paynepride.com/nic/sermon-prep:latest
+    container_name: sermon-prep
+    env_file: .env          # APP_PASSWORD (required), AUTH_SECRET (optional)
+    environment:
+      TZ: "America/Chicago"
+      DATA_DIR: "/data/notes"
+    volumes:
+      - /tank/encrypted/docker/sermon-prep:/data
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 256m
+    memswap_limit: 256m
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.sermon-prep.entrypoints: "websecure"
+      traefik.http.routers.sermon-prep.rule: "Host(`sermons.paynepride.com`)"
+      traefik.http.routers.sermon-prep.tls.certresolver: letsencrypt
+      traefik.http.routers.sermon-prep.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.sermon-prep.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.sermon-prep.loadbalancer.server.port: "8000"
+    healthcheck:
+      test: ["CMD", "node", "-e",
+             "fetch('http://localhost:8000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  phantomlink:
+    external: true

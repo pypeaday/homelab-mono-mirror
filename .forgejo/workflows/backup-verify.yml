@@ -1,0 +1,47 @@
+name: Backup Verify
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 13 * * 0"   # weekly subset restore, Sundays 8am CT
+    - cron: "0 14 1 * *"   # monthly FULL restore, 1st at 8am CT
+
+jobs:
+  verify:
+    runs-on: docker
+    env:
+      # monthly cron does a full restore into the tank dataset
+      FULL_RESTORE: ${{ github.event.schedule == '0 14 1 * *' }}
+      RESTORE_TARGET: /ci-verify
+      GOTIFY_URL: "http://192.168.1.9:2346/message"
+      GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: |
+          apt-get update -qq && apt-get install -y -qq curl bzip2 openssh-client python3
+
+      - name: Write credentials from secrets
+        env:
+          RESTIC_PASSWORD: ${{ secrets.RESTIC_PASSWORD }}
+          RESTIC_SSH_KEY: ${{ secrets.RESTIC_SSH_KEY }}
+        run: |
+          umask 077
+          echo -n "$RESTIC_PASSWORD" > /tmp/.restic-password
+          echo "$RESTIC_SSH_KEY" > /tmp/.restic-key
+          chmod 600 /tmp/.restic-key
+
+      - name: Verify backup (check + restore + freshness)
+        env:
+          RESTIC_PASSWORD_FILE: /tmp/.restic-password
+          RESTIC_KEY: /tmp/.restic-key
+        run: scripts/backup-verify.sh
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          curl -sf -X POST "$GOTIFY_URL?token=$GOTIFY_TOKEN" \
+            -F "title=backup-verify FAILED" \
+            -F "message=restic check or restore-test failed - see $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions" \
+            -F "priority=8" || true

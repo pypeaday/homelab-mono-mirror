@@ -1,0 +1,11 @@
+{
+  "digest_rules": ["Sanoid warning"],
+  "digest_on_refire": [
+    "Disk temperature high",
+    "Host swap thrashing (sustained pswp rate)",
+    "DH — Site probe STALE"
+  ],
+  "suppress_rules": [],
+  "suppress_severities": ["info"],
+  "critical_bypass": true
+}
