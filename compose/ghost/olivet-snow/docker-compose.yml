@@ -1,0 +1,27 @@
+services:
+  app:
+    image: git.paynepride.com/nic/olivet-snow:latest
+    container_name: olivet-snow
+    env_file: .env          # APP_PASSWORD (required), AUTH_SECRET (optional), GOTIFY_TOKEN (optional)
+    environment:
+      TZ: "America/Chicago"
+      DATA_DIR: "/data"
+    volumes:
+      - /tank/encrypted/docker/olivet-snow:/data
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 256m
+    memswap_limit: 256m
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.olivet-snow.entrypoints: "websecure"
+      traefik.http.routers.olivet-snow.rule: "Host(`snow.paynepride.com`)"
+      traefik.http.routers.olivet-snow.tls.certresolver: letsencrypt
+      traefik.http.routers.olivet-snow.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.olivet-snow.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.olivet-snow.loadbalancer.server.port: "8000"
+
+networks:
+  phantomlink:
+    external: true

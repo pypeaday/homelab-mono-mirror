@@ -1,0 +1,14 @@
+- datetime:
+    format:
+      dateStyle: long
+      timeStyle: short
+      hour12: true
+- weather:
+    provider: openmeteo
+    # Appleton, WI
+    latitude: 44.26
+    longitude: -88.41
+    units: imperial
+- search:
+    provider: google
+    target: _blank

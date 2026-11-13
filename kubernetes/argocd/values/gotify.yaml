@@ -1,0 +1,28 @@
+image:
+  repository: gotify/server
+  tag: latest
+
+containerPort: 80
+
+env:
+  - name: TZ
+    value: "America/Chicago"
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+
+volumes:
+  - name: data
+    mountPath: /app/data
+    hostPath: /tank/encrypted/docker/the-pit-zfs/gotify
+
+ingress:
+  host: gotify.paynepride.com
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "25m"
+  limits:
+    memory: "1Gi"

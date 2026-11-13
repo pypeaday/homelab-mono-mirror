@@ -1,0 +1,36 @@
+image:
+  repository: sissbruecker/linkding
+  tag: latest
+
+containerPort: 9090
+
+env:
+  - name: TZ
+    value: "America/Chicago"
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+
+envFrom:
+  - secretRef:
+      name: linkding-secrets
+
+volumes:
+  - name: data
+    mountPath: /etc/linkding/data
+    hostPath: /tank/encrypted/docker/linkding
+
+ingress:
+  host: linkding.paynepride.com
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "50m"
+  limits:
+    memory: "1Gi"
+
+sealedSecret:
+  enabled: true
+  name: linkding-secrets

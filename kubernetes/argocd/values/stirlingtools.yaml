@@ -1,0 +1,39 @@
+image:
+  repository: ghcr.io/stirling-tools/s-pdf
+  tag: latest
+
+containerPort: 8080
+
+env:
+  - name: TZ
+    value: "America/Chicago"
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: DOCKER_ENABLE_SECURITY
+    value: "false"
+  - name: INSTALL_BOOK_AND_ADVANCED_HTML_OPS
+    value: "false"
+  - name: LANGS
+    value: "en_US"
+
+volumes:
+  - name: training-data
+    mountPath: /usr/share/tessdata
+    hostPath: /tank/encrypted/docker/stirlingtools/trainingData
+  - name: configs
+    mountPath: /configs
+    hostPath: /tank/encrypted/docker/stirlingtools/extraConfigs
+
+ingress:
+  host: stirlingtools.paynepride.com
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: homelab-ip-whitelist@kubernetescrd
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "2Gi"

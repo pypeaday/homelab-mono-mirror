@@ -1,0 +1,19 @@
+services:
+  ollama:
+    image: ollama/ollama:0.40.2
+    container_name: ollama
+    restart: unless-stopped
+    mem_limit: 16g
+    networks:
+      - phantomlink
+    volumes:
+      - /tank/encrypted/docker/ollama:/root/.ollama
+    environment:
+      # 24h residency pinned 10G+ RSS and pushed the box into swap — warm
+      # through alert bursts, unload between isolated ones instead
+      OLLAMA_KEEP_ALIVE: "10m"
+      OLLAMA_NUM_PARALLEL: "1"
+
+networks:
+  phantomlink:
+    external: true

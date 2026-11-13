@@ -1,0 +1,20 @@
+image:
+  repository: docker.io/actualbudget/actual-server
+  tag: latest
+
+containerPort: 5006
+
+volumes:
+  - name: data
+    mountPath: /data
+    hostPath: /tank/encrypted/docker/actual/actual-data
+
+ingress:
+  host: actual.paynepride.com
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "50m"
+  limits:
+    memory: "512Mi"

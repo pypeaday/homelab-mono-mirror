@@ -1,0 +1,15 @@
+services:
+  bridge:
+    build: .
+    container_name: forgejo-kanboard-bridge
+    env_file: .env
+    restart: unless-stopped
+    mem_limit: 512m
+    memswap_limit: 512m
+    # internal only — forgejo reaches it on phantomlink, nothing public
+    networks:
+      - phantomlink
+
+networks:
+  phantomlink:
+    external: true

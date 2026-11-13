@@ -1,0 +1,56 @@
+name: sanitized-mirror
+description: Remove folders and mirror sanitized repo to GitHub over SSH
+
+inputs:
+  remove:
+    description: "Comma-separated folders to delete"
+    required: true
+  github_repo:
+    description: "GitHub target in form username/repo"
+    required: true
+  ssh_private_key:
+    description: "SSH private key with write access to the GitHub repo"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install SSH key
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ inputs.ssh_private_key }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Remove folders
+      shell: bash
+      run: |
+        for path in $(echo "${{ inputs.remove }}" | tr ',' '\n'); do
+          rm -rf "$path"
+        done
+
+    - name: Cleanup empty dirs
+      shell: bash
+      run: |
+        find . -type d -empty -delete
+
+    - name: Configure git identity
+      shell: bash
+      run: |
+        git config user.name "Forgejo Mirror Bot"
+        git config user.email "forgejo-mirror-bot@pype.dev"
+
+    - name: Replace entire history with fresh commit
+      shell: bash
+      run: |
+        git checkout --orphan sanitized_root
+        git add -A
+        git commit -m "Sanitized root"
+        git branch -M main
+
+    - name: Push to GitHub via SSH
+      shell: bash
+      run: |
+        git remote add github "git@github.com:${{ inputs.github_repo }}.git"
+        git push github HEAD:main --force

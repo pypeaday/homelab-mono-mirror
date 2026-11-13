@@ -1,0 +1,10 @@
+services:
+  renovate:
+    container_name: renovate
+    image: renovate/renovate:44.132.2
+    env_file: .env
+    restart: "no"
+    deploy:
+      resources:
+        limits:
+          memory: "2g"

@@ -1,0 +1,2 @@
+node-ip: ${NODE_IP}
+server: https://${SERVER_HOST}:6443

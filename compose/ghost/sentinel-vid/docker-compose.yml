@@ -1,0 +1,88 @@
+services:
+  web:
+    image: git.paynepride.com/nic/sentinel-vid:latest
+    container_name: sentinel-vid
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 256m
+    memswap_limit: 256m
+    volumes:
+      - /tank/encrypted/nas/sentinel-j/reolink:/data:ro
+      - /tank/encrypted/nas/sentinel-j/.exports:/exports
+      - /tank/encrypted/nas/sentinel-j/.events:/events:ro
+    environment:
+      CAMERA_TZ: America/New_York
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.sentinel-vid.entrypoints: "websecure"
+      traefik.http.routers.sentinel-vid.rule: "Host(`cam-j.paynepride.com`)"
+      traefik.http.routers.sentinel-vid.tls.certresolver: letsencrypt
+      traefik.http.routers.sentinel-vid.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.sentinel-vid.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.sentinel-vid.loadbalancer.server.port: "8080"
+      traefik.http.routers.sentinel-vid.middlewares: "sentinel-vid-auth@docker"
+      traefik.http.middlewares.sentinel-vid-auth.basicauth.users: "${BASIC_AUTH_USERS}"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Pull new clips from the Windows laptop over tailnet sftp, then enforce
+  # the 30-day retention on the local dataset. Footage dataset is excluded
+  # from all replication/backups on purpose.
+  sync:
+    image: rclone/rclone:1.75.2
+    container_name: sentinel-vid-sync
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 512m
+    memswap_limit: 512m
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while true; do
+          echo "[sync] $(date -Is) pull"
+          rclone copy jsrc:Videos/reolink /data/reolink \
+            --min-age 2m --transfers 4 --checkers 8 \
+            --stats-one-line --stats 60s -v || true
+          rclone delete /data/reolink --min-age 30d -v || true
+          rclone rmdirs /data/reolink --leave-root -v || true
+          sleep 300
+        done
+    environment:
+      RCLONE_CONFIG_JSRC_TYPE: sftp
+      RCLONE_CONFIG_JSRC_HOST: j-sentinel.tail91d75.ts.net
+      RCLONE_CONFIG_JSRC_USER: minec
+      RCLONE_CONFIG_JSRC_KEY_FILE: /key/id_ghost
+      RCLONE_CONFIG_JSRC_KNOWN_HOSTS_FILE: /key/known_hosts
+      RCLONE_CONFIG_JSRC_DISABLE_HASH_CHECK: "true"
+    volumes:
+      - /tank/encrypted/nas/sentinel-j:/data
+      - /home/nic/.ssh/id_ghost:/key/id_ghost:ro
+      - ./known_hosts:/key/known_hosts:ro
+
+  # Scans new sub-stream clips for motion windows, captions the mid-frame
+  # with the local VLM (ollama gemma3:4b on phantomlink) and writes
+  # per-day event JSON + thumbs the webapp shows on the timeline.
+  detect:
+    image: git.paynepride.com/nic/sentinel-vid-detect:latest
+    container_name: sentinel-vid-detect
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 1g
+    memswap_limit: 1g
+    volumes:
+      - /tank/encrypted/nas/sentinel-j/reolink:/data:ro
+      - /tank/encrypted/nas/sentinel-j/.events:/events
+    environment:
+      CAMERA_TZ: America/New_York
+      OLLAMA_URL: http://ollama:11434
+      VLM_MODEL: gemma3:4b
+
+networks:
+  phantomlink:
+    external: true

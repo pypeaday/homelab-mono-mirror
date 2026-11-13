@@ -1,0 +1,33 @@
+image:
+  repository: freshrss/freshrss
+  tag: latest
+
+containerPort: 80
+
+env:
+  - name: TZ
+    value: "America/Chicago"
+  - name: CRON_MIN
+    value: "3,33"
+  - name: TRUSTED_PROXY
+    value: "0.0.0.0/0"
+  - name: PUBLISHED_PORT
+    value: "80"
+
+volumes:
+  - name: data
+    mountPath: /var/www/FreshRSS/data
+    hostPath: /tank/encrypted/docker/freshrss-zfs/data
+  - name: extensions
+    mountPath: /var/www/FreshRSS/extensions
+    hostPath: /tank/encrypted/docker/freshrss-zfs/extensions
+
+ingress:
+  host: freshrss.paynepride.com
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "50m"
+  limits:
+    memory: "512Mi"
