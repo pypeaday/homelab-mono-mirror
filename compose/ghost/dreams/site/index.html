@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>devin dreams</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%99%3C/text%3E%3C/svg%3E">
+<style>
+  :root { --bg:#0d1117; --fg:#e6edf3; --dim:#8b949e; --card:#161b22;
+          --ok:#3fb950; --warn:#d29922; --bad:#f85149; --info:#58a6ff;
+          --line:#30363d; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:15px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:20px; margin:0; display:flex; align-items:baseline; gap:10px; }
+  h1 small { color:var(--dim); font-weight:400; font-size:13px; }
+
+  /* hero status banner — the answer to "did it work, do I need to look" */
+  #hero { margin:18px 0 24px; padding:20px 24px; border-radius:10px;
+          border:1px solid var(--line); background:var(--card);
+          display:flex; align-items:center; gap:16px; }
+  #hero .dot { width:14px; height:14px; border-radius:50%; flex:none; }
+  #hero.good .dot { background:var(--ok); box-shadow:0 0 12px var(--ok); }
+  #hero.warn .dot { background:var(--warn); box-shadow:0 0 12px var(--warn); }
+  #hero.bad  .dot { background:var(--bad);  box-shadow:0 0 12px var(--bad); }
+  #hero .msg { font-size:19px; font-weight:600; }
+  #hero .sub { color:var(--dim); font-size:13px; margin-top:2px; }
+
+  .cards { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px;
+          padding:10px 18px; min-width:105px; }
+  .card .n { font-size:24px; font-weight:600; }
+  .card .l { color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+  .info { color:var(--info); }
+
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px;
+           padding:16px 20px; margin-bottom:20px; }
+  .panel h2 { font-size:13px; color:var(--dim); margin:0 0 12px;
+              text-transform:uppercase; letter-spacing:.6px; font-weight:600; }
+  .chartbox { position:relative; height:250px; }
+  .grid2 { display:grid; grid-template-columns:3fr 2fr; gap:20px; }
+  @media (max-width:800px){ .grid2{grid-template-columns:1fr;} }
+
+  h2.sec { font-size:13px; color:var(--dim); text-transform:uppercase;
+           letter-spacing:.6px; margin:28px 0 12px; font-weight:600; }
+  details { background:var(--card); border:1px solid var(--line); border-radius:8px;
+            margin-bottom:10px; }
+  summary { cursor:pointer; padding:12px 18px; font-weight:600; list-style:none; }
+  summary::-webkit-details-marker { display:none; }
+  summary::before { content:"▸ "; color:var(--dim); }
+  details[open] summary::before { content:"▾ "; }
+  summary .tag { float:right; font-weight:400; font-size:12px; color:var(--dim); }
+  .md { padding:4px 20px 18px; border-top:1px solid var(--line); }
+  .md table { width:100%; border-collapse:collapse; font-size:13px; }
+  .md th,.md td { padding:6px 10px; text-align:left; border-bottom:1px solid var(--line); }
+  .md code { background:#0d1117; padding:1px 5px; border-radius:4px; font-size:12px; }
+  .md pre code { display:block; padding:10px; overflow-x:auto; }
+  .md h1,.md h2,.md h3 { font-size:15px; }
+  footer { color:var(--dim); font-size:12px; margin-top:32px; }
+  .dim { color:var(--dim); } .err { color:var(--bad); padding:30px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🌙 devin dreams <small>nightly session consolidation</small></h1>
+
+  <div id="hero" class="good">
+    <div class="dot"></div>
+    <div><div class="msg">checking…</div><div class="sub"></div></div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="panel"><h2>proposal outcomes per night</h2>
+    <div class="chartbox"><canvas id="outcome"></canvas></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel"><h2>sessions distilled &amp; runtime</h2>
+      <div class="chartbox"><canvas id="throughput"></canvas></div>
+    </div>
+    <div class="panel"><h2>all-time outcomes</h2>
+      <div class="chartbox"><canvas id="split"></canvas></div>
+    </div>
+  </div>
+
+  <h2 class="sec">reports</h2>
+  <div id="reports"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script src="/chart.umd.min.js"></script>
+<script src="/marked.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const C = { ok:'#3fb950', warn:'#d29922', bad:'#f85149', info:'#58a6ff', dim:'#8b949e' };
+Chart.defaults.color = C.dim;
+Chart.defaults.borderColor = '#30363d';
+Chart.defaults.font.family = '-apple-system,"Segoe UI",Roboto,sans-serif';
+
+async function t(url){ const r = await fetch(url); if(!r.ok) throw 0; return r.text(); }
+async function j(url){ const r = await fetch(url); if(!r.ok) throw 0; return r.json(); }
+const today = () => new Date().toISOString().slice(0,10);
+const ago = d => { const n = Math.round((Date.now()-new Date(d))/864e5);
+  return n<=0?'today':n===1?'yesterday':n+' days ago'; };
+
+async function init(){
+  let rows = [];
+  try {
+    rows = (await t('data/metrics.jsonl')).trim().split('\n').filter(Boolean)
+      .map(l => { try { return JSON.parse(l); } catch { return null; } })
+      .filter(Boolean).slice(-30);
+  } catch {}
+  const last = rows[rows.length-1] || {};
+  const tot = k => rows.reduce((s,r) => s + (r[k]||0), 0);
+
+  // HERO: the only question is "did it run, does anything need me"
+  const hero = $('#hero');
+  if (!last.date) {
+    hero.className = 'bad';
+    hero.querySelector('.msg').textContent = 'no runs yet';
+    hero.querySelector('.sub').textContent = 'waiting for the first nightly pass';
+  } else if (last.date < today() && ago(last.date).includes('day') && !ago(last.date).includes('yesterday')) {
+    hero.className = 'bad';
+    hero.querySelector('.msg').textContent = 'missed last night’s run';
+    hero.querySelector('.sub').textContent = `last success was ${last.date} — check devin-dream.timer`;
+  } else if (last.flagged > 0) {
+    hero.className = 'warn';
+    hero.querySelector('.msg').textContent = `${last.flagged} item${last.flagged>1?'s':''} flagged for you`;
+    hero.querySelector('.sub').textContent =
+      `${last.date} — ${last.applied||0} applied · ${last.rejected||0} rejected · see Kanboard`;
+  } else {
+    hero.className = 'good';
+    hero.querySelector('.msg').textContent = 'healthy';
+    hero.querySelector('.sub').textContent =
+      `${last.date} — ${last.sessions||0} sessions distilled, ${last.applied||0} applied, nothing needs you`;
+  }
+
+  // KPI strip (4 max, with comparison where it means something)
+  const adopt = tot('applied') + tot('rejected');
+  $('#cards').innerHTML = [
+    ['adopt rate', adopt ? Math.round(100*tot('applied')/adopt)+'%' : '—', 'ok'],
+    ['sessions seen', tot('sessions'), 'info'],
+    ['open flags', tot('flagged'), tot('flagged') ? 'warn' : ''],
+    ['avg runtime', rows.length ?
+        Math.round(rows.reduce((s,r)=>s+(r.duration_s||0),0)/rows.length/60)+'m' : '—', ''],
+  ].map(([l,n,c]) => `<div class="card"><div class="n ${c}">${n}</div><div class="l">${l}</div></div>`).join('');
+
+  const labels = rows.map(r => r.date.slice(5));
+  const stacked = { stacked:true };
+  new Chart($('#outcome'), {
+    type:'bar',
+    data:{ labels, datasets:[
+      {label:'applied',  data:rows.map(r=>r.applied ??0), backgroundColor:C.ok},
+      {label:'flagged',  data:rows.map(r=>r.flagged ??0), backgroundColor:C.warn},
+      {label:'rejected', data:rows.map(r=>r.rejected??0), backgroundColor:C.bad},
+      {label:'verify fixes', data:rows.map(r=>r.fixed ??0), backgroundColor:C.info} ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{boxWidth:12}} },
+      scales:{ x:{stacked:true, grid:{display:false}},
+               y:{stacked:true, beginAtZero:true, ticks:{precision:0}} } } });
+
+  new Chart($('#throughput'), {
+    data:{ labels, datasets:[
+      {type:'bar', label:'sessions', data:rows.map(r=>r.sessions??0),
+       backgroundColor:'#58a6ff55', borderColor:C.info, borderWidth:1, yAxisID:'y'},
+      {type:'line', label:'runtime (min)', yAxisID:'y1', tension:.3,
+       data:rows.map(r=>r.duration_s?Math.round(r.duration_s/60):null),
+       borderColor:C.warn, pointRadius:3, pointBackgroundColor:C.warn} ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:12}}},
+      scales:{ y:{beginAtZero:true,ticks:{precision:0}},
+               y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false}} } } });
+
+  new Chart($('#split'), {
+    type:'doughnut',
+    data:{ labels:['applied','flagged','rejected'],
+      datasets:[{ data:[tot('applied'),tot('flagged'),tot('rejected')],
+        backgroundColor:[C.ok,C.warn,C.bad], borderColor:'#161b22', borderWidth:3 }]},
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{legend:{position:'bottom',labels:{boxWidth:12}}} } });
+
+  // reports: one collapsible per day, newest first, latest open
+  let dates = [];
+  try { dates = (await j('data/index.json')).dates || []; } catch {}
+  $('#reports').innerHTML = dates.map((d,i) =>
+    `<details ${i===0?'open':''}><summary>${d}
+       <span class="tag">${ago(d)}</span></summary>
+     <div class="md" data-day="${d}"><span class="dim">loading…</span></div>
+     </details>`).join('') || '<div class="err dim">no reports yet</div>';
+
+  document.querySelectorAll('#reports details').forEach(det => {
+    det.addEventListener('toggle', async () => {
+      if(!det.open) return;
+      const box = det.querySelector('.md'), day = box.dataset.day;
+      if(box.dataset.loaded) return; box.dataset.loaded = 1;
+      let html = '';
+      for(const f of ['REPORT','REVIEW','VERIFY']){
+        try { html += `<h3>${f.toLowerCase()}</h3>` + marked.parse(await t(`data/reports/${day}/${f}.md`)); }
+        catch {}
+      }
+      box.innerHTML = html || '<div class="err">empty</div>';
+    });
+  });
+  const first = document.querySelector('#reports details[open]');
+  if(first) first.dispatchEvent(new Event('toggle'));
+
+  $('#foot').textContent = `data through ${last.date||'—'} · metrics.jsonl pushed nightly · `;
+  const a = document.createElement('a');
+  a.href = 'https://kanboard.paynepride.com/board/15';
+  a.textContent = 'flagged queue →'; a.style.color = 'var(--info)';
+  $('#foot').appendChild(a);
+}
+init();
+</script>
+</body>
+</html>

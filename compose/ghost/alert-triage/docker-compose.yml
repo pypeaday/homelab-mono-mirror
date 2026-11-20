@@ -1,0 +1,32 @@
+services:
+  alert-triage:
+    container_name: alert-triage
+    build: .
+    restart: unless-stopped
+    mem_limit: 256m
+    networks:
+      - phantomlink
+    volumes:
+      - /tank/encrypted/docker/alert-triage/data:/data
+      - ./rules.json:/etc/alert-triage/rules.json:ro
+    environment:
+      MODE: ${MODE:-shadow}              # shadow | enforce
+      GOTIFY_ENDPOINT: http://gotify:80/message
+      GOTIFY_TOKEN: ${GOTIFY_TOKEN}
+      OLLAMA_BASE: http://ollama:11434   # unset => tier2 skipped (fail-open)
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-gemma3:4b}
+      OLLAMA_TIMEOUT: "30"               # cpu inference; cold model can take >10s
+      DEDUP_MIN: "30"
+      DIGEST_SEC: "1800"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.alert-triage.rule: "Host(`triage.paynepride.com`)"
+      traefik.http.routers.alert-triage.tls.certresolver: letsencrypt
+      traefik.http.routers.alert-triage.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.alert-triage.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.alert-triage.loadbalancer.server.port: "8931"
+      traefik.http.routers.alert-triage.middlewares: "default-whitelist@file"
+
+networks:
+  phantomlink:
+    external: true

@@ -1,0 +1,51 @@
+services:
+  app:
+    image: git.paynepride.com/nic/brainrot:latest
+    container_name: brainrot
+    environment:
+      TZ: "America/Chicago"
+      DATA_DIR: "/data"
+      MINIFLUX_URL: "http://miniflux:8080"
+      BRAINROT_VOICES: "bm_george,am_adam,bf_emma,am_michael"
+      BRAINROT_SPEED: "1.3"
+      BRAINROT_SUMMARIZE_WORDS: "900"
+      OLLAMA_URL: "http://ollama:11434"
+      OLLAMA_MODEL: "gemma4:26b"
+      OLLAMA_TIMEOUT_S: "600"
+      BRAINROT_TARGET_QUEUE: "40"
+      BRAINROT_PART_WORDS: "700"
+      BRAINROT_MAX_PARTS: "5"
+      BRAINROT_POLL_S: "300"
+      BRAINROT_SKIP_CATS: "Video,Code Repos"
+      BRAINROT_SKIP_FEEDS: "all,dev.to top,Vulners"
+      BRAINROT_KEYWORDS: "dokploy,komodo,portainer,docker,kubernetes,k3s,containerd,traefik,nginx,caddy,wireguard,tailscale,openssh,openssl,linux kernel,ubuntu,debian,fedora,zfs,forgejo,gitea,renovate,freshrss,nextcloud,immich,paperless,ollama,searxng,linkding,karakeep,frigate,minecraft,gotify,apprise,minio,syncthing,duplicati,kanboard,grist,affine,beszel,eigenfocus,nostr,temporalio,sonarr,radarr,prowlarr,bazarr,overseerr,jellyfin,plex media,qbittorrent,postgres,sqlite,redis,mysql,mariadb,node.js,python,grafana,prometheus,signoz,ffmpeg,stirling,wallos,manyfold,homebox,chatgpt"
+      BRAINROT_MARK_READ: "1"
+      BRAINROT_RETENTION_GB: "10"
+    volumes:
+      - /tank/encrypted/docker/brainrot:/data
+    env_file:
+      - .env
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 4g
+    memswap_limit: 4g
+    cpus: 4
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.brainrot.entrypoints: "websecure"
+      traefik.http.routers.brainrot.rule: "Host(`brainrot.paynepride.com`)"
+      traefik.http.routers.brainrot.middlewares: "default-whitelist@file"
+      traefik.http.routers.brainrot.tls.certresolver: letsencrypt
+      traefik.http.routers.brainrot.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.brainrot.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.brainrot.loadbalancer.server.port: "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  phantomlink:
+    external: true

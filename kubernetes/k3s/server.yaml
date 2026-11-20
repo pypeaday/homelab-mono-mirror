@@ -1,0 +1,6 @@
+write-kubeconfig-mode: "0644"
+node-ip: ${NODE_IP}
+advertise-address: ${NODE_IP}
+tls-san:
+  - ${HOSTNAME}
+  - k3s.tailnet.local

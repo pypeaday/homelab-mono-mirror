@@ -1,0 +1,24 @@
+deploy:
+  #!/bin/bash
+  set -e
+  rsync -av clickhouse-config.xml clickhouse-users.xml custom-function.xml \
+    clickhouse-cluster.xml prometheus.yml alertmanager.yml nginx-config.conf \
+    otel-collector-config.yaml otel-collector-opamp-config.yaml user_scripts \
+    ghost:/tank/encrypted/docker/signoz-zfs/config/
+  docker context use ghost
+  docker compose up -d --force-recreate
+
+up:
+  docker --context ghost compose up -d
+
+down:
+  docker --context ghost compose down
+
+restart:
+  docker --context ghost compose restart
+
+logs lines="100":
+  docker --context ghost compose logs --tail={{lines}} -f
+
+ps:
+  docker --context ghost compose ps

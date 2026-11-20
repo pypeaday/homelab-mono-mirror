@@ -1,0 +1,46 @@
+title: Home
+theme: dark
+color: slate
+headerStyle: boxed
+cardBlur: md
+layout:
+  Media:
+    style: row
+    columns: 4
+  Cloud & Files:
+    style: row
+    columns: 4
+  Apps:
+    style: row
+    columns: 4
+  Smart Home:
+    style: row
+    columns: 4
+  Bookmarks:
+    style: row
+    columns: 4
+  Church:
+    style: row
+    columns: 4
+  Finances:
+    style: row
+    columns: 4
+  Monitoring:
+    style: row
+    columns: 4
+  Projects:
+    style: row
+    columns: 4
+    initiallyCollapsed: true
+  Media Tools:
+    style: row
+    columns: 4
+    initiallyCollapsed: true
+  Dev:
+    style: row
+    columns: 4
+    initiallyCollapsed: true
+  Infra:
+    style: row
+    columns: 4
+    initiallyCollapsed: true

@@ -1,0 +1,32 @@
+image:
+  repository: ghcr.io/sysadminsmedia/homebox
+  tag: latest
+
+containerPort: 7745
+
+env:
+  - name: HBOX_LOG_LEVEL
+    value: "info"
+  - name: HBOX_LOG_FORMAT
+    value: "text"
+  - name: HBOX_WEB_MAX_FILE_UPLOAD
+    value: "10"
+  - name: HBOX_OPTIONS_ALLOW_ANALYTICS
+    value: "false"
+
+volumes:
+  - name: data
+    mountPath: /data
+    hostPath: /tank/encrypted/docker/the-pit-zfs/homebox-data
+
+ingress:
+  host: homebox.paynepride.com
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: homelab-ip-whitelist@kubernetescrd
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "25m"
+  limits:
+    memory: "512Mi"

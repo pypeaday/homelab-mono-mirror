@@ -1,0 +1,36 @@
+services:
+  app:
+    image: git.paynepride.com/nic/listener:latest
+    container_name: listener
+    env_file: .env          # LISTEN_PASSWORD (blank = open), FEED_KEY (pins feed URLs)
+    environment:
+      TZ: "America/Chicago"
+      DATA_DIR: "/data"
+      DEFAULT_VOICE: "am_santa"   # only the initial default; change it in the app's Settings
+    volumes:
+      - /tank/encrypted/docker/listener:/data
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 4g
+    memswap_limit: 4g
+    cpus: 4
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.listener.entrypoints: "websecure"
+      traefik.http.routers.listener.rule: "Host(`listen.paynepride.com`)"
+      traefik.http.routers.listener.middlewares: "default-whitelist@file"
+      traefik.http.routers.listener.tls.certresolver: letsencrypt
+      traefik.http.routers.listener.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.listener.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.listener.loadbalancer.server.port: "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request;urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  phantomlink:
+    external: true

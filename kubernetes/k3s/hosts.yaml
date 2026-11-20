@@ -1,0 +1,13 @@
+server:
+  host: server1.tail123.ts.net
+  user: nic
+  lan_ip: 192.168.1.10
+
+agents:
+  - host: agent1.tail123.ts.net
+    user: nic
+    lan_ip: 192.168.1.20
+
+  - host: agent2.tail123.ts.net
+    user: ubuntu
+    lan_ip: 192.168.1.21

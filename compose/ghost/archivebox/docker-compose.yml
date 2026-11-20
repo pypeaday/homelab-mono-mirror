@@ -1,0 +1,68 @@
+services:
+  archivebox:
+    image: archivebox/archivebox:0.9.73
+    container_name: archivebox
+    env_file: .env
+    volumes:
+      - /tank/encrypted/docker/archivebox/data:/data
+    ports:
+      # 0.9.x serves the web UI via daphne on 5797 (was 8000 in 0.7.x)
+      - "8004:5797"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.archivebox.rule: Host(`archivebox.paynepride.com`)
+      traefik.http.routers.archivebox.tls.certresolver: letsencrypt
+      traefik.http.routers.archivebox.tls.domains[0].main: paynepride.com
+      traefik.http.routers.archivebox.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.archivebox.loadbalancer.server.port: "5797"
+
+  # archivebox-novnc:
+  #   image: theasp/novnc:latest
+  #   container_name: archivebox-novnc
+  #   env_file: .env
+  #   ports:
+  #     - "8887:8080"
+  #   restart: unless-stopped
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: "1g"
+
+  archivebox-telegram-bot:
+    image: pypeaday/archivebox-telegram-bot@sha256:7d22e6468e830a3ec568e19919d25abcda28696d6133d3921a42df42057a3fb0
+    container_name: archivebox-telegram-bot
+    env_file: .env
+    volumes:
+      - /tank/encrypted/docker/archivebox/cookies.txt:/app/cookies.txt:ro
+      - /tank/encrypted/docker/archivebox/data:/data:ro
+    restart: unless-stopped
+    depends_on:
+      - archivebox
+    deploy:
+      resources:
+        limits:
+          memory: "1g"
+
+  # 0.9.x: the scheduler is built into `archivebox server` (run --daemon under
+  # supervisord in the main container). The old separate `schedule --update`
+  # container crash-loops — the flag was removed.
+
+  sonic:
+    image: valeriansaliou/sonic:v1.10.2
+    container_name: sonic
+    env_file: .env
+    ports:
+      - "1491:1491"
+    volumes:
+      - /tank/encrypted/docker/archivebox/sonic:/var/lib/sonic/store
+      - /tank/encrypted/docker/archivebox/sonic.cfg:/etc/sonic.cfg
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: "1g"

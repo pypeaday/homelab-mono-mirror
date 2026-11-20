@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: miniflux-db
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      POSTGRES_DB: ${MF_PG_NAME:-miniflux}
+      POSTGRES_USER: ${MF_PG_USER:-miniflux}
+      POSTGRES_PASSWORD: ${MF_PG_PASSWORD}
+    volumes:
+      - /tank/encrypted/docker/miniflux/postgres:/var/lib/postgresql/data
+    networks:
+      - miniflux
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${MF_PG_USER:-miniflux}", "-d", "${MF_PG_NAME:-miniflux}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: miniflux/miniflux:latest
+    container_name: miniflux
+    restart: unless-stopped
+    mem_limit: 512m
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      TZ: "America/Chicago"
+      DATABASE_URL: postgres://${MF_PG_USER:-miniflux}:${MF_PG_PASSWORD}@db/${MF_PG_NAME:-miniflux}?sslmode=disable
+      RUN_MIGRATIONS: "1"
+      CREATE_ADMIN: "1"
+      ADMIN_USERNAME: ${MF_ADMIN_USER:-nic}
+      ADMIN_PASSWORD: ${MF_ADMIN_PASSWORD}
+      BASE_URL: https://rss.paynepride.com
+      POLLING_FREQUENCY: "30"
+      BATCH_SIZE: "50"
+      MEDIA_PROXY_MODE: "all"
+    networks:
+      - miniflux
+      - phantomlink
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.miniflux.entrypoints: "websecure"
+      traefik.http.routers.miniflux.rule: "Host(`rss.paynepride.com`)"
+      traefik.http.routers.miniflux.middlewares: "default-whitelist@file"
+      traefik.http.routers.miniflux.tls.certresolver: letsencrypt
+      traefik.http.routers.miniflux.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.miniflux.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.miniflux.loadbalancer.server.port: "8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  miniflux:
+  phantomlink:
+    external: true

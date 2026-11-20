@@ -1,0 +1,33 @@
+services:
+  app:
+    image: git.paynepride.com/nic/blantons-watch:latest
+    container_name: blantons-watch
+    env_file: .env          # GOTIFY_URL / GOTIFY_TOKEN
+    environment:
+      TZ: "America/Chicago"
+      DB_PATH: "/data/blantons.db"
+    volumes:
+      - /tank/encrypted/docker/blantons:/data
+    networks:
+      - phantomlink
+    restart: unless-stopped
+    mem_limit: 512m
+    memswap_limit: 512m
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.blantons.entrypoints: "websecure"
+      traefik.http.routers.blantons.rule: "Host(`blantons.paynepride.com`)"
+      traefik.http.routers.blantons.tls.certresolver: letsencrypt
+      traefik.http.routers.blantons.tls.domains[0].main: "paynepride.com"
+      traefik.http.routers.blantons.tls.domains[0].sans: "*.paynepride.com"
+      traefik.http.services.blantons.loadbalancer.server.port: "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request;urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  phantomlink:
+    external: true

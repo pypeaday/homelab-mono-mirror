@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Curated feed bundle to replace Twitter/X scrolling. All URLs verified 2026-11-18.
+     Import: FreshRSS > Subscription management > Import/export > choose this file. -->
+<opml version="2.0">
+  <head>
+    <title>FreshRSS curated feeds</title>
+    <dateCreated>2026-11-18</dateCreated>
+  </head>
+  <body>
+    <outline text="People" description="The Primeagen / Theo / Dax circle — engineers who write, not post">
+      <outline text="Simon Willison" type="rss" xmlUrl="https://simonwillison.net/atom/everything/" htmlUrl="https://simonwillison.net/"/>
+      <outline text="Mitchell Hashimoto" type="rss" xmlUrl="https://mitchellh.com/feed.xml" htmlUrl="https://mitchellh.com/"/>
+      <outline text="Xe Iaso" type="rss" xmlUrl="https://xeiaso.net/blog.rss" htmlUrl="https://xeiaso.net/blog"/>
+      <outline text="Julia Evans" type="rss" xmlUrl="https://jvns.ca/atom.xml" htmlUrl="https://jvns.ca/"/>
+      <outline text="Armin Ronacher" type="rss" xmlUrl="https://lucumr.pocoo.org/feed.atom" htmlUrl="https://lucumr.pocoo.org/"/>
+      <outline text="fasterthanli.me (Amos)" type="rss" xmlUrl="https://fasterthanli.me/index.xml" htmlUrl="https://fasterthanli.me/"/>
+      <outline text="Thorsten Ball" type="rss" xmlUrl="https://thorstenball.com/atom.xml" htmlUrl="https://thorstenball.com/"/>
+      <outline text="overreacted (Dan Abramov)" type="rss" xmlUrl="https://overreacted.io/rss.xml" htmlUrl="https://overreacted.io/"/>
+      <outline text="Kent C. Dodds" type="rss" xmlUrl="https://kentcdodds.com/blog/rss.xml" htmlUrl="https://kentcdodds.com/blog"/>
+      <outline text="Pragmatic Engineer" type="rss" xmlUrl="https://newsletter.pragmaticengineer.com/feed" htmlUrl="https://newsletter.pragmaticengineer.com/"/>
+      <outline text="antirez" type="rss" xmlUrl="https://antirez.com/rss" htmlUrl="https://antirez.com/"/>
+      <outline text="Josh Comeau" type="rss" xmlUrl="https://joshwcomeau.com/rss.xml" htmlUrl="https://joshwcomeau.com/"/>
+      <outline text="matklad" type="rss" xmlUrl="https://matklad.github.io/feed.xml" htmlUrl="https://matklad.github.io/"/>
+      <outline text="Without Boats" type="rss" xmlUrl="https://without.boats/index.xml" htmlUrl="https://without.boats/"/>
+    </outline>
+    <outline text="Video" description="YouTube channels — where Prime, Theo and Dax actually publish">
+      <outline text="ThePrimeagen" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw" htmlUrl="https://www.youtube.com/@ThePrimeagen"/>
+      <outline text="ThePrimeTime (Prime clips)" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCUyeluBRhGPCW4rPe_UvBZQ" htmlUrl="https://www.youtube.com/@ThePrimeTimeagen"/>
+      <outline text="Theo - t3.gg" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCIftlCAyhF8R1WnsgPPjI6Q" htmlUrl="https://www.youtube.com/@t3dotgg"/>
+      <outline text="Terminal (Dax)" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC4E2FSKc5czySVKqdsoR26A" htmlUrl="https://www.youtube.com/@terminaldotshop"/>
+      <outline text="TJ DeVries" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCd3dNckv1Za2coSaHGHl5aA" htmlUrl="https://www.youtube.com/@teej_dv"/>
+      <outline text="Melkey" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC1Zfv1Zrp1q5lKgBomzOyCA" htmlUrl="https://www.youtube.com/@melkeydev"/>
+      <outline text="bashbunni" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC9H0HzpKf5JlazkADWnW1Jw" htmlUrl="https://www.youtube.com/@bashbunni"/>
+      <outline text="Fireship" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA" htmlUrl="https://www.youtube.com/@Fireship"/>
+    </outline>
+    <outline text="Tech News" description="Aggregators and news sites — the daily.dev replacement">
+      <outline text="Hacker News frontpage (&gt;100 pts)" type="rss" xmlUrl="https://hnrss.org/frontpage?points=100" htmlUrl="https://news.ycombinator.com/"/>
+      <outline text="Lobsters" type="rss" xmlUrl="https://lobste.rs/rss" htmlUrl="https://lobste.rs/"/>
+      <outline text="Ars Technica" type="rss" xmlUrl="https://feeds.arstechnica.com/arstechnica/index" htmlUrl="https://arstechnica.com/"/>
+      <outline text="Changelog" type="rss" xmlUrl="https://changelog.com/feed" htmlUrl="https://changelog.com/"/>
+      <outline text="LWN.net" type="rss" xmlUrl="https://lwn.net/headlines/rss" htmlUrl="https://lwn.net/"/>
+      <outline text="GitHub Blog" type="rss" xmlUrl="https://github.blog/feed/" htmlUrl="https://github.blog/"/>
+      <outline text="dev.to top" type="rss" xmlUrl="https://dev.to/feed" htmlUrl="https://dev.to/"/>
+      <outline text="CSS-Tricks" type="rss" xmlUrl="https://css-tricks.com/feed/" htmlUrl="https://css-tricks.com/"/>
+      <outline text="Smashing Magazine" type="rss" xmlUrl="https://www.smashingmagazine.com/feed/" htmlUrl="https://www.smashingmagazine.com/"/>
+    </outline>
+    <outline text="Security / CVE" description="Advisories, exploits-in-wild, vuln research">
+      <outline text="Vulners" type="rss" xmlUrl="https://vulners.com/rss.xml" htmlUrl="https://vulners.com/"/>
+      <outline text="Cisco Talos" type="rss" xmlUrl="https://blog.talosintelligence.com/rss/" htmlUrl="https://blog.talosintelligence.com/"/>
+      <outline text="Zero Day Initiative" type="rss" xmlUrl="https://www.zerodayinitiative.com/blog?format=rss" htmlUrl="https://www.zerodayinitiative.com/blog"/>
+      <outline text="BleepingComputer" type="rss" xmlUrl="https://www.bleepingcomputer.com/feed/" htmlUrl="https://www.bleepingcomputer.com/"/>
+      <outline text="Krebs on Security" type="rss" xmlUrl="https://krebsonsecurity.com/feed/" htmlUrl="https://krebsonsecurity.com/"/>
+      <outline text="Schneier on Security" type="rss" xmlUrl="https://www.schneier.com/feed/atom/" htmlUrl="https://www.schneier.com/"/>
+      <outline text="The Hacker News" type="rss" xmlUrl="https://thehackernews.com/feeds/posts/default" htmlUrl="https://thehackernews.com/"/>
+      <outline text="GitHub Security Blog" type="rss" xmlUrl="https://github.blog/security/feed/" htmlUrl="https://github.blog/security/"/>
+    </outline>
+  </body>
+</opml>

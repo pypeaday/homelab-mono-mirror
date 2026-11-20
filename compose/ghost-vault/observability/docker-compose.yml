@@ -1,0 +1,87 @@
+services:
+  otel-collector:
+    image: signoz/signoz-otel-collector:0.111.16
+    container_name: signoz-otel-collector
+    command:
+      - "--config=/etc/otel-collector-config.yaml"
+      - "--feature-gates=-pkg.translator.prometheus.NormalizeName"
+    user: root
+    volumes:
+      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/hostfs:ro
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=host.name=ghost-vault,os.type=linux
+    ports:
+      - "127.0.0.1:4317:4317"
+      - "127.0.0.1:4318:4318"
+    restart: unless-stopped
+    mem_limit: 512m
+    memswap_limit: 512m
+    depends_on:
+      - node-exporter
+      - smartctl-exporter
+    networks:
+      - monitoring
+
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    container_name: signoz-node-exporter
+    pid: host
+    restart: unless-stopped
+    mem_limit: 128m
+    memswap_limit: 128m
+    command:
+      - --path.rootfs=/host
+      - --path.sysfs=/host/sys
+      - --path.procfs=/host/proc
+      - --collector.zfs
+      - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker|run)($$|/)
+    volumes:
+      - /:/host:ro,rslave
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring
+
+  smartctl-exporter:
+    image: prometheuscommunity/smartctl-exporter:v0.14.0
+    container_name: signoz-smartctl-exporter
+    restart: unless-stopped
+    mem_limit: 256m
+    memswap_limit: 256m
+    privileged: true
+    user: "0"
+    command:
+      - --smartctl.path=/usr/sbin/smartctl
+      - --smartctl.interval=60s
+    volumes:
+      - /dev:/dev:ro
+    ports:
+      - "9633:9633"
+    networks:
+      - monitoring
+
+  logspout:
+    image: gliderlabs/logspout:v3.2.14
+    container_name: signoz-logspout
+    restart: unless-stopped
+    mem_limit: 128m
+    memswap_limit: 128m
+    volumes:
+      - /etc/hostname:/etc/host_hostname:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: syslog+tcp://otel-collector:2255
+    environment:
+      - TAIL=0
+    depends_on:
+      - otel-collector
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge

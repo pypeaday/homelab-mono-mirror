@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# signoz-sql — run a ClickHouse query against the SigNoz datastore on ghost.
+#
+#   signoz-sql "SELECT ..."      or    echo "SELECT ..." | signoz-sql
+#
+# Tables of interest:
+#   signoz_traces.distributed_signoz_index_v3  (spans: serviceName, name, durationNano, traceID, spanID, references)
+#   signoz_logs.distributed_logs               (log bodies + attributes)
+#   signoz_metrics.*                           (samples per metric family)
+#
+# Examples:
+#   signoz-sql "SELECT name, count() c, round(avg(durationNano)/1e6,1) ms
+#     FROM signoz_traces.distributed_signoz_index_v3
+#     WHERE serviceName='notifiq' AND timestamp > now() - INTERVAL 1 HOUR
+#     GROUP BY name ORDER BY c DESC"
+set -euo pipefail
+sql="${1:-$(cat)}"
+exec ssh -o BatchMode=yes ghost \
+  "docker exec -i signoz-clickhouse clickhouse-client" <<< "$sql"
